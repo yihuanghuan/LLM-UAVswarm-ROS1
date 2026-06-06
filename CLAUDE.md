@@ -114,6 +114,11 @@ ros1_ws/
 
 本机只有 ROS2 Humble，无 ROS1 Noetic 原生环境。ROS1 代码的编译和测试通过 Docker 容器完成。
 
+**Docker 权限注意**: 当前用户已在 `docker` 组中，但 shell 会话可能未生效。
+- 临时解决: 每次 `docker` 命令前加 `sudo`
+- 永久解决: 执行 `newgrp docker` 或重新登录
+- **本机所有 Docker 命令均需 `sudo` 前缀**
+
 ```bash
 # 构建 ROS1 + MAVROS 镜像（仅首次）
 cd ~/ros1_ws && sudo docker build -t ros1-mavros:latest .
@@ -125,6 +130,9 @@ sudo docker run --rm -v $(pwd):/ros1_ws ros1-mavros:latest \
 # SITL 全链路测试（需先在另一终端启动 PX4 SITL）
 bash test_single_uav.sh
 sudo docker exec -it ros1_test bash  # 进入容器发送指令
+
+# 验证镜像是否存在
+sudo docker images | grep ros1-mavros
 ```
 
 ### 实验室真机 (Ubuntu 20.04 + ROS1 Noetic 原生)
