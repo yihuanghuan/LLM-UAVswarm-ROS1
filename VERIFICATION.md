@@ -1,202 +1,188 @@
-# ROS1 + MAVROS 单机实机测试 — 验证方案与测试标准
+# ROS1 + MAVROS 单机仿真与实机测试 — 统一验证方案
 
-## 0. 环境要求
+## ⚡ 快速开始（两种方式）
 
-| 组件 | 版本 | 说明 |
-|------|------|------|
-| Ubuntu | 20.04 | ROS1 Noetic 官方支持版本 |
-| ROS1 | Noetic | `ros-noetic-desktop-full` |
-| MAVROS | 1.x | `ros-noetic-mavros` + `ros-noetic-mavros-extras` |
-| PX4 | v1.14+ | SITL 仿真测试用 `make px4_sitl gazebo-classic` |
-| Gazebo | Classic 11 | SITL 仿真 |
-| Python | 3.8 | `numpy`, `scipy`, `openai`, `httpx` |
+| 方式 | 适用场景 | 前置条件 |
+|------|---------|---------|
+| **Docker 测试**（推荐本机验证） | Ubuntu 22.04 宿主机，ROS1 在容器中，PX4+Gazebo 在宿主机 | 已安装 Docker、PX4-Autopilot |
+| **原生 ROS1 测试** | Ubuntu 20.04 原生安装 ROS1 Noetic | 已安装 ROS1、MAVROS、PX4-Autopilot |
 
 ---
 
-## 1. 编译验证
+## 方式 A: Docker 容器测试（本机 Ubuntu 22.04）
 
-### 1.1 创建工作空间并编译
+本机已通过全链路验证（2026-06-06），架构如下：
+
+```
+宿主机 (Ubuntu 22.04)                  Docker 容器 (ros1-mavros)
+┌──────────────────────┐    UDP     ┌──────────────────────────┐
+│ PX4 SITL + Gazebo    │◄───14580──►│ MAVROS + Controller      │
+│ (原生运行)            │  MAVLink   │ (ros:noetic-ros-base)    │
+└──────────────────────┘            └──────────────────────────┘
+```
+
+### A.1 构建镜像（仅首次）
 
 ```bash
-# 克隆 ROS1 移植代码
-mkdir -p ~/ros1_ws/src
-cd ~/ros1_ws/src
-git clone <this-repo-url> .
-
-# 安装 MAVROS (若未安装)
-sudo apt-get install ros-noetic-mavros ros-noetic-mavros-extras
-# 安装 GeographicLib (MAVROS 依赖)
-sudo /opt/ros/noetic/lib/mavros/install_geographiclib_datasets.sh
-
-# Python 依赖
-pip install numpy scipy openai httpx
-
-# 编译
 cd ~/ros1_ws
-catkin_make
-
-# 预期输出:
-#   [100%] Built target ladrc_position_controller_node
-#   无编译错误 (允许 warning)
-source devel/setup.bash
+sudo docker build -t ros1-mavros:latest .
 ```
 
-### 1.2 编译通过标准
-
-- [ ] `catkin_make` 零 error 退出
-- [ ] 生成消息头文件：`devel/include/uav_swarm_interfaces/UAVSwarmCommand.h`
-- [ ] 生成可执行文件：`devel/lib/ladrc_controller/ladrc_position_controller_node`
-- [ ] 生成 Python 包：`devel/lib/python3/dist-packages/location_allocate/`
-
----
-
-## 2. 消息格式验证
+### A.2 启动测试
 
 ```bash
-# 验证消息定义正确
-rosmsg show uav_swarm_interfaces/UAVSwarmCommand
-# 预期输出:
-#   std_msgs/Header header
-#   uint8 uav_id
-#   geometry_msgs/Point target_pos
-#   float32 duration
-#   string motion_style
-#   float32 safety_factor
-
-rosmsg show uav_swarm_interfaces/UAVStatus
-# 预期输出:
-#   uint8 uav_id
-#   bool is_hover_stable
-```
-
----
-
-## 3. SITL 单机仿真测试
-
-### 3.1 启动顺序（4 个终端）
-
-**终端 1: 启动 PX4 SITL**
-```bash
+# 终端 1: 启动 PX4 SITL + Gazebo（带图形界面看无人机飞行）
 cd ~/PX4-Autopilot
 make px4_sitl gazebo-classic
 # 等待出现: "INFO  [commander] Ready for takeoff!"
-# PX4 SITL 默认 MAVLink UDP 端口: 14580
-```
 
-**终端 2: 启动 ROS1 + MAVROS + 控制节点**
-```bash
+# 终端 2: 启动 ROS1 环境
 cd ~/ros1_ws
-source devel/setup.bash
-roslaunch ladrc_controller single_uav.launch uav_id:=1 enu_offset_y:=0.0
+bash test_single_uav.sh
+# 等待出现: "Offboard 模式已激活。LADRC 控制器接管。"
 
-# 预期日志输出:
-#   [INFO] LADRC 集群执行节点已初始化 (命名空间: /uav1)
-#   [INFO] 等待 MAVROS 连接和 swarm_command 消息...
-#   [INFO] 已接收到 MAVROS local_position/odom 消息
-#   [INFO] 系统稳定，发送解锁命令...
-#   [INFO] 解锁命令已发送
-#   [INFO] 解锁成功。切换到 Offboard 模式...
-#   [INFO] Offboard 模式已激活。LADRC 控制器接管。
-#   [INFO] UAV1 悬停保持锁定: [...]
-```
+# 终端 3: 进入容器发送指令
+sudo docker exec -it ros1_test bash
+source /opt/ros/noetic/setup.bash
+source /ros1_ws/devel/setup.bash
 
-**终端 3: 发送测试指令 (手动 topic pub)**
-```bash
-source ~/ros1_ws/devel/setup.bash
-
-# 发送单点飞行指令: 飞到 (3, 0, 3)，用时 5 秒，normal 模式
+# 发送飞行指令（注意: YAML 内层用单引号，外层双引号）
 rostopic pub -1 /uav1/swarm_command uav_swarm_interfaces/UAVSwarmCommand \
   "{header: {stamp: now, frame_id: 'world'}, uav_id: 1, \
     target_pos: {x: 3.0, y: 0.0, z: 3.0}, duration: 5.0, \
     motion_style: 'normal', safety_factor: 0.0}"
 ```
 
-**终端 4: 监控状态**
+### A.3 监控命令
+
 ```bash
-# 监控 UAV 状态
+# 在容器内执行:
+# 查看控制器日志
+tail -f /tmp/controller2.log
+
+# 查看 MAVROS 状态
+rostopic echo /uav1/mavros/state -n 1
+
+# 查看悬停状态
 rostopic echo /uav1/status
 
-# 监控 ENU 位置
+# 查看 ENU 位置
 rostopic echo /uav1/odom
-
-# 监控 MAVROS 里程计
-rostopic echo /uav1/mavros/local_position/odom/pose/pose/position
 ```
 
-### 3.2 单机 SITL 测试通过标准
+### A.4 停止测试
 
-| 测试项 | 通过标准 | 检查方法 |
-|--------|---------|---------|
-| T1: MAVROS 连接 | 终端 2 出现 "已接收到 MAVROS local_position/odom" | 确认 MAVROS 节点正常启动 |
-| T2: 自动起飞 | 终端 2 出现 "Offboard 模式已激活。LADRC 控制器接管。" | 无人机在 Gazebo 中起飞 |
-| T3: 悬停保持 | 终端 2 出现 "悬停保持锁定" | 无人机稳定悬停（不漂移） |
-| T4: 接收指令 | 终端 2 出现 "swarm_cmd 回调触发 (目标=...)" | 发送指令后被正确接收 |
-| T5: 轨迹跟踪 | 终端 2 出现轨迹日志 (Ref/Pos/Cmd) | 无人机向目标移动 |
-| T6: 到达目标 | 终端 2 出现 "悬停稳定! pos_err=..., vel=..." | 无人机到达 (3,0,3) 附近 |
-| T7: 状态反馈 | 终端 4 中 `/uav1/status` 的 `is_hover_stable=true` | 调度层可以收到到达反馈 |
-| T8: 位置反馈 | 终端 4 中 `/uav1/odom` 输出合理 ENU 坐标 | x≈3, y≈0, z≈3 |
+```bash
+sudo docker rm -f ros1_test
+# PX4 SITL 在终端 1 按 Ctrl+C 停止
+```
 
 ---
 
-## 4. 调度器端到端测试
+## 方式 B: 原生 ROS1 测试（实验室 Ubuntu 20.04）
 
-### 4.1 测试步骤
+### B.1 编译
 
-在终端 3 不再手动 pub，改用调度器：
+```bash
+git clone git@github.com:yihuanghuan/LLM-UAVswarm-ROS1.git ~/ros1_ws
+cd ~/ros1_ws
+catkin_make
+source devel/setup.bash
+```
+
+编译通过标准：
+- [ ] `catkin_make` 零 error
+- [ ] `devel/include/uav_swarm_interfaces/UAVSwarmCommand.h` 生成
+- [ ] `devel/lib/ladrc_controller/ladrc_position_controller_node` 生成
+
+### B.2 消息格式验证
+
+```bash
+source devel/setup.bash
+rosmsg show uav_swarm_interfaces/UAVSwarmCommand
+# 预期: std_msgs/Header header, uint8 uav_id, geometry_msgs/Point target_pos, ...
+rosmsg show uav_swarm_interfaces/UAVStatus
+# 预期: uint8 uav_id, bool is_hover_stable
+```
+
+### B.3 启动测试（4 终端）
+
+**终端 1: PX4 SITL**
+```bash
+cd ~/PX4-Autopilot
+make px4_sitl gazebo-classic
+```
+
+**终端 2: MAVROS + 控制器**
+```bash
+cd ~/ros1_ws && source devel/setup.bash
+roslaunch ladrc_controller single_uav.launch uav_id:=1 enu_offset_y:=0.0
+```
+
+**终端 3: 发送飞行指令**
+```bash
+source ~/ros1_ws/devel/setup.bash
+rostopic pub -1 /uav1/swarm_command uav_swarm_interfaces/UAVSwarmCommand \
+  "{header: {stamp: now, frame_id: 'world'}, uav_id: 1, \
+    target_pos: {x: 3.0, y: 0.0, z: 3.0}, duration: 5.0, \
+    motion_style: 'normal', safety_factor: 0.0}"
+```
+
+**终端 4: 监控**
+```bash
+source ~/ros1_ws/devel/setup.bash
+rostopic echo /uav1/status          # 悬停状态
+rostopic echo /uav1/odom            # ENU 位置
+rostopic echo /uav1/mavros/state    # PX4 状态
+```
+
+---
+
+## 测试通过标准 (T1-T8)
+
+| 测试项 | 通过标准 | 检查方法 |
+|--------|---------|---------|
+| T1: MAVROS 连接 | 日志出现 "已接收到 MAVROS local_position/odom" | `rostopic echo /uav1/mavros/state` → `connected: True` |
+| T2: 自动起飞 | 日志出现 "Offboard 模式已激活。LADRC 控制器接管。" | Gazebo 中无人机升空 |
+| T3: 悬停保持 | 日志出现 "悬停保持锁定" | 无人机在空中稳定，无明显漂移 |
+| T4: 接收指令 | 日志出现 "swarm_cmd 回调触发" | 发送指令后立即触发 |
+| T5: 轨迹跟踪 | 日志持续输出 `Ref[x,y,z] Pos[x,y,z] Cmd[x,y,z]` | Gazebo 中无人机向目标移动 |
+| T6: 到达目标 | 日志出现 "悬停稳定! pos_err=...m" | 无人机停在目标附近 |
+| T7: 状态反馈 | `/uav1/status` 中 `is_hover_stable: True` | `rostopic echo /uav1/status` 验证 |
+| T8: 位置反馈 | `/uav1/odom` 输出 ENU 坐标接近目标 | `rostopic echo /uav1/odom` → x≈3, y≈0, z≈3 |
+
+---
+
+## 调度器端到端测试
+
+在控制器运行时（T2 之后），启动调度器：
 
 ```bash
 source ~/ros1_ws/devel/setup.bash
-pip install openai numpy scipy httpx  # 确保 Python 依赖
 rosrun location_allocate location_allocate_node
 ```
 
-输入测试指令:
+输入：
 ```
 UAV1 以[3,0,3]为中心，变换成圆形编队，半径为0米，限时5秒
 ```
 
-> 注：单机时 radius=0 表示飞往中心点本身
-
-### 4.2 调度器测试通过标准
-
 | 测试项 | 通过标准 |
 |--------|---------|
-| S1: LLM 解析 | 终端输出 JSON 蓝图，`task_sequences[0].uav_id=[1]` |
-| S2: 命令发送 | 终端输出 "UAV1 -> [3.0, 0.0, 3.0]" |
-| S3: 悬停等待 | 终端输出 "UAV1 到达目标并悬停稳定!" |
-| S4: 任务完成 | 终端输出 "所有任务序列执行完毕" |
+| S1: LLM 解析 | 输出 JSON 蓝图，`task_sequences[0].uav_id=[1]` |
+| S2: 命令发送 | 输出 "UAV1 -> [3.0, 0.0, 3.0]" |
+| S3: 悬停等待 | 输出 "UAV1 到达目标并悬停稳定!" |
+| S4: 任务完成 | 输出 "所有任务序列执行完毕" |
 
 ---
 
-## 5. 坐标系统验证
+## 运动风格验证
 
-### 5.1 ENU 坐标检查
-
-MAVROS 输出 ENU 坐标 (ROS 标准):
-- `odom.pose.pose.position.x` = 东 (East)  → 对应 Gazebo 世界 X 轴
-- `odom.pose.pose.position.y` = 北 (North) → 对应 Gazebo 世界 Y 轴
-- `odom.pose.pose.position.z` = 上 (Up)    → 对应 Gazebo 世界 Z 轴
-
-### 5.2 验证方法
-
-```bash
-# 在 Gazebo 中观察无人机位置，与 rostopic echo 输出对比
-rostopic echo /uav1/odom
-# 当 Gazebo 中无人机在 (x=3, y=0, z=3) 时，
-# odom 输出应为 x≈3, y≈0, z≈3 (ENU 坐标)
-```
-
----
-
-## 6. 运动风格验证
-
-发送相同目标位置但不同 motion_style，观察飞行速度差异：
+相同目标，不同风格，观察飞行时间：
 
 ```bash
 # Smooth (最慢)
 rostopic pub -1 /uav1/swarm_command ... "{..., motion_style: 'smooth', ...}"
-# Normal (中等)
-rostopic pub -1 /uav1/swarm_command ... "{..., motion_style: 'normal', ...}"
 # Aggressive (最快)
 rostopic pub -1 /uav1/swarm_command ... "{..., motion_style: 'aggressive', ...}"
 ```
@@ -205,7 +191,7 @@ rostopic pub -1 /uav1/swarm_command ... "{..., motion_style: 'aggressive', ...}"
 
 ---
 
-## 7. 代码修改点速查 (ROS1 vs ROS2)
+## 代码移植对照 (ROS2 → ROS1)
 
 | 关注点 | ROS2 原版 | ROS1 移植版 |
 |--------|----------|------------|
@@ -217,33 +203,48 @@ rostopic pub -1 /uav1/swarm_command ... "{..., motion_style: 'aggressive', ...}"
 | 位置设定点 | TrajectorySetpoint (NED) | PoseStamped (ENU) |
 | Python spin | rclpy.spin_once(self, ...) | rospy.sleep(...) |
 | 订阅回调参数 | lambda 闭包捕获 uid | callback_args=uid |
-| 参数系统 | declare_parameter + get_parameter | ros::NodeHandle::param() |
 
 ---
 
-## 8. 常见问题排查
+## 常见问题
 
 | 问题 | 原因 | 解决 |
 |------|------|------|
-| catkin_make 报 mavros_msgs 找不到 | MAVROS 未安装 | `sudo apt-get install ros-noetic-mavros ros-noetic-mavros-msgs` |
-| 控制节点收不到 odom | MAVROS 未连接 PX4 | 检查 `rostopic list \| grep mavros`，确认 MAVROS 正常运行 |
-| 解锁失败 | 安全开关/预检未通过 | 检查 PX4 控制台，确认 `commander prearm` 无报错 |
-| Offboard 模式切换失败 | setpoint 流 < 2Hz | 确认控制节点 50Hz 定时器正常运行 |
-| 调度器 import 失败 | Python 路径未包含 devel | `source devel/setup.bash` |
-| /uav1/odom 坐标不对 | spawn 偏移设置有误 | 单机 SITL 时 `enu_offset_y=0.0` |
+| 控制器收不到 odom | MAVROS 未连接 PX4 | `rostopic list \| grep mavros` 确认话题存在 |
+| 解锁失败 | 安全开关/预检 | PX4 控制台 `commander prearm` 检查 |
+| Offboard 切换失败 | setpoint 流 < 2Hz | 确认控制节点 50Hz 定时器正常 |
+| 调度器 import 失败 | 未 source | `source devel/setup.bash` |
+| rostopic pub YAML 报错 | 引号嵌套冲突 | **外层双引号，内层单引号**: `"{key: 'value'}"` |
+| Docker 容器日志中文乱码 | 终端编码 | 不影响功能，控制器正常运行 |
+| /uav1/odom 坐标不对 | spawn 偏移 | 单机 SITL 时 `enu_offset_y=0.0` |
 
 ---
 
-## 9. 实机飞行前检查清单
+## 实机飞行前检查清单
 
-在 SITL 测试全部通过后，进行实机测试前：
+> ⚠️ **通过全部 T1-T8 SITL 测试后**，才能进行实机飞行。
 
-- [ ] PX4 固件确认 MAVLink 串口配置正确 (`MAV_1_CONFIG = TELEM2`)
-- [ ] MAVROS fcu_url 改为串口地址 (`/dev/ttyACM0:921600` 或实际连接)
-- [ ] `enu_offset_y` 参数设为 `0.0` (实机无 Gazebo spawn 偏移)
+### 硬件检查
+- [ ] PX4 固件 MAVLink 串口已配置 (`MAV_1_CONFIG = TELEM2`)
+- [ ] 机载计算机与 Pixhawk 串口/USB 连接正常
 - [ ] 安全开关已按下，遥控器就绪
-- [ ] 第一次飞行使用小幅度指令 (如 ±1m 位置阶跃)
-- [ ] 确认紧急降落流程 (遥控器切 Stabilized 模式或 ROS 发送 disarm)
-- [ ] 低电量保护 (`BAT_LOW_THR` 等 PX4 参数已配置)
-- [ ] 动捕系统已标定、VRPN 数据正常
-- [ ] 若使用 Nokov 动捕: 确认 `vrpn_client_ros` 正常运行，PX4 `EKF2_EV_CTRL` 使能外部视觉
+- [ ] 电池电压充足，低电量保护已配置
+- [ ] 螺旋桨安装牢固，电机转向正确
+
+### 软件配置
+- [ ] MAVROS `fcu_url` 改为串口地址 (如 `/dev/ttyACM0:921600`)
+- [ ] `enu_offset_y=0.0`（实机无 Gazebo spawn 偏移）
+- [ ] `enu_offset_x=0.0`, `enu_offset_z=0.0`
+- [ ] LADRC 参数已针对实机调低（先用保守值: ωo=8, ωc=2）
+
+### 动捕系统
+- [ ] Nokov 动捕系统已标定，VRPN 数据正常广播
+- [ ] `vrpn_client_ros` 在机载计算机上正常运行
+- [ ] PX4 `EKF2_EV_CTRL` 使能外部视觉融合
+- [ ] PX4 `EKF2_HGT_REF` 设为 vision（若用动捕作高度参考）
+
+### 安全措施
+- [ ] 第一次飞行: 位置阶跃 ±1m，限时 5s
+- [ ] 紧急降落: 遥控器切 Stabilized 模式
+- [ ] 至少 2 人在场（操作员 + 安全观察员）
+- [ ] 飞行区域清场，防护网就绪
