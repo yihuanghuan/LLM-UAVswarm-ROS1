@@ -1,0 +1,33 @@
+/**:
+  ros__parameters:
+    # Control frequency (Hz)
+    control_frequency: 50.0
+
+    # X-axis LADRC parameters
+    # omega_o: observer bandwidth (3-5x omega_c for proper disturbance estimation)
+    # omega_c: controller bandwidth (settling time ≈ 4/omega_c)
+    # b0: control gain estimate (1.0 = nominal 1:1 mapping)
+    omega_o_x: 10.0
+    omega_c_x: 3.0
+    b0_x: 1.0
+
+    # Y-axis LADRC parameters
+    omega_o_y: 10.0
+    omega_c_y: 3.0
+    b0_y: 1.0
+
+    # Z-axis LADRC parameters (higher bandwidth for vertical dynamics)
+    omega_o_z: 15.0
+    omega_c_z: 3.5
+    b0_z: 1.0
+
+    # Limits
+    max_velocity: 5.0          # m/s
+    max_acceleration_x: 5.0    # m/s^2 (multicopter horizontal limit at ~35° tilt)
+    max_acceleration_y: 5.0    # m/s^2
+    max_acceleration_z: 8.0    # m/s^2 (vertical needs headroom for gravity + climb)
+
+    # IAPF 避障参数 (Phase 5)
+    iapf_safe_distance: 1.5   # 安全距离 (m)，增大预警范围
+    iapf_repulsion_gain: 25.0 # 斥力增益，经位置+加速度双通道生效
+    neighbor_uav_ids: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # 需要监听的邻居 UAV ID 列表

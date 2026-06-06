@@ -1,0 +1,38 @@
+<!--
+  单机 LADRC 控制启动文件 (ROS1 + MAVROS)
+  用法: roslaunch ladrc_controller single_uav.launch uav_id:=1
+
+  PX4 SITL 端口映射:
+    单机 make px4_sitl:         MAVROS → udp://:14540@127.0.0.1:14580
+    sitl_multiple_run.sh -n N:  实例1→14580, 实例2→14581, ..., 实例N→14580+N-1
+
+  实机:
+    Pixhawk USB 直连:           MAVROS → /dev/ttyACM0:921600
+    Pixhawk TELEM2 串口:        MAVROS → /dev/ttyTHS1:921600 (Jetson 等)
+-->
+<launch>
+  <arg name="uav_id" default="1" doc="无人机编号 (1-10)"/>
+  <arg name="px4_instance" default="1" doc="PX4 SITL 实例编号"/>
+  <arg name="use_sim" default="true" doc="true=SITL仿真(UDP), false=实机(串口)"/>
+  <arg name="fcu_url_sim" default="udp://:14540@127.0.0.1:14580" doc="SITL MAVLink UDP 地址"/>
+  <arg name="fcu_url_real" default="/dev/ttyACM0:921600" doc="实机串口地址"/>
+  <arg name="enu_offset_y" default="0.0" doc="ENU Y轴偏移 (SITL=3*uav_id, 实机=0)"/>
+
+  <group ns="uav$(arg uav_id)">
+    <!-- MAVROS 节点 -->
+    <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
+      <param name="fcu_url" value="$(eval 'udp://:14540@127.0.0.1:14580' if arg('use_sim') == 'true' else arg('fcu_url_real'))" />
+      <param name="gcs_url" value="" />
+      <param name="target_system_id" value="$(arg uav_id)" />
+      <param name="target_component_id" value="1" />
+    </node>
+
+    <!-- LADRC 控制节点 -->
+    <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
+      <rosparam file="$(find ladrc_controller)/config/ladrc_params.yaml" command="load" />
+      <param name="enu_offset_x" value="0.0" />
+      <param name="enu_offset_y" value="$(arg enu_offset_y)" />
+      <param name="enu_offset_z" value="0.0" />
+    </node>
+  </group>
+</launch>

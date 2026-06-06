@@ -1,0 +1,78 @@
+<!--
+  多机集群启动文件 (ROS1 + MAVROS)
+  用法: roslaunch ladrc_controller swarm.launch uav_ids:=[1,2,3,4,5]
+
+  PX4 SITL 多机端口:
+    sitl_multiple_run.sh -n N 启动 N 个实例，分别监听端口 14580, 14581, ..., 14580+N-1
+    注意: sitl_multiple_run.sh 从 instance 1 开始 (非 0)
+-->
+<launch>
+  <arg name="uav_ids" default="[1,2,3,4,5]" doc="要启动的 UAV ID 列表"/>
+  <arg name="use_sim" default="true" doc="true=SITL仿真, false=实机"/>
+
+  <!-- 为每架 UAV 启动 MAVROS + 控制节点 -->
+  <group ns="uav1">
+    <node if="$(arg use_sim)" name="mavros" pkg="mavros" type="mavros_node" output="screen">
+      <param name="fcu_url" value="udp://:14540@127.0.0.1:14580" />
+      <param name="target_system_id" value="1" />
+    </node>
+    <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
+      <rosparam file="$(find ladrc_controller)/config/ladrc_params.yaml" command="load" />
+      <param name="enu_offset_x" value="0.0" />
+      <param name="enu_offset_y" value="3.0" />  <!-- SITL: Y=3*1 -->
+      <param name="enu_offset_z" value="0.0" />
+    </node>
+  </group>
+
+  <group ns="uav2">
+    <node if="$(arg use_sim)" name="mavros" pkg="mavros" type="mavros_node" output="screen">
+      <param name="fcu_url" value="udp://:14550@127.0.0.1:14581" />
+      <param name="target_system_id" value="2" />
+    </node>
+    <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
+      <rosparam file="$(find ladrc_controller)/config/ladrc_params.yaml" command="load" />
+      <param name="enu_offset_x" value="0.0" />
+      <param name="enu_offset_y" value="6.0" />  <!-- SITL: Y=3*2 -->
+      <param name="enu_offset_z" value="0.0" />
+    </node>
+  </group>
+
+  <group ns="uav3">
+    <node if="$(arg use_sim)" name="mavros" pkg="mavros" type="mavros_node" output="screen">
+      <param name="fcu_url" value="udp://:14560@127.0.0.1:14582" />
+      <param name="target_system_id" value="3" />
+    </node>
+    <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
+      <rosparam file="$(find ladrc_controller)/config/ladrc_params.yaml" command="load" />
+      <param name="enu_offset_x" value="0.0" />
+      <param name="enu_offset_y" value="9.0" />  <!-- SITL: Y=3*3 -->
+      <param name="enu_offset_z" value="0.0" />
+    </node>
+  </group>
+
+  <group ns="uav4">
+    <node if="$(arg use_sim)" name="mavros" pkg="mavros" type="mavros_node" output="screen">
+      <param name="fcu_url" value="udp://:14570@127.0.0.1:14583" />
+      <param name="target_system_id" value="4" />
+    </node>
+    <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
+      <rosparam file="$(find ladrc_controller)/config/ladrc_params.yaml" command="load" />
+      <param name="enu_offset_x" value="0.0" />
+      <param name="enu_offset_y" value="12.0" />
+      <param name="enu_offset_z" value="0.0" />
+    </node>
+  </group>
+
+  <group ns="uav5">
+    <node if="$(arg use_sim)" name="mavros" pkg="mavros" type="mavros_node" output="screen">
+      <param name="fcu_url" value="udp://:14580@127.0.0.1:14584" />
+      <param name="target_system_id" value="5" />
+    </node>
+    <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
+      <rosparam file="$(find ladrc_controller)/config/ladrc_params.yaml" command="load" />
+      <param name="enu_offset_x" value="0.0" />
+      <param name="enu_offset_y" value="15.0" />
+      <param name="enu_offset_z" value="0.0" />
+    </node>
+  </group>
+</launch>
