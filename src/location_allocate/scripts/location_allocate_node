@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+"""ROS1 调度层入口脚本"""
+from location_allocate.location_allocate import main
+
+if __name__ == '__main__':
+    main()
