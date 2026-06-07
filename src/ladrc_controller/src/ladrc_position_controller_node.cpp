@@ -318,6 +318,7 @@ private:
       {
         ROS_INFO("Offboard 模式已激活。LADRC 控制器接管。");
         flight_state_ = FlightState::RUNNING_TRAJECTORY;
+        hover_hold_set_ = false;  // 重置悬停保持，在空中重新捕获位置
         sm_timer_.stop();  // 状态机任务完成
       }
       break;
