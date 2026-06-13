@@ -26,13 +26,14 @@
 from openai import OpenAI
 import re
 import json
+import os
 import time
 import httpx
 
-# -------------------------- 配置项（硬编码KEY） --------------------------
-API_KEY = "sk-cp-9x3kcvFzbvnOjYlnl_pPis_CACTgZd0x7GKTmAU6YqjbDt951u5nTB7u__UvQjR7IdU0Ea5G2IZQydKfy6zbxGmhO7vg4EMwiGnPvr5KCv4sLoCtoGSPhuA"
-BASE_URL = "https://api.minimax.chat/v1"
-MODEL_NAME = "MiniMax-M2.7-highspeed"
+# -------------------------- 配置项（优先从环境变量读取） --------------------------
+API_KEY = os.environ.get("MINIMAX_API_KEY", "")
+BASE_URL = os.environ.get("MINIMAX_BASE_URL", "https://api.minimax.chat/v1")
+MODEL_NAME = os.environ.get("MINIMAX_MODEL_NAME", "MiniMax-M2.7-highspeed")
 # -------------------------------------------------------------------------
 
 # ====================== 固定系统Prompt（新格式） ======================
@@ -228,6 +229,13 @@ def purify_json_content(raw_content: str) -> str:
 
 # ====================== 核心解析函数（新格式） ======================
 def parse_uav_command(user_command: str, ros_aux_info: str = ""):
+    if not API_KEY:
+        raise RuntimeError(
+            "MINIMAX_API_KEY 环境变量未设置。\n"
+            "请在终端中执行: export MINIMAX_API_KEY='your-api-key-here'\n"
+            "或写入 ~/.bashrc 持久化。"
+        )
+
     full_prompt = (
             SYSTEM_PROMPT + "\n"
             + FEW_SHOT_EXAMPLES + "\n"

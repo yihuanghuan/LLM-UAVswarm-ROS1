@@ -64,6 +64,7 @@ public:
     pnh_.param("enu_offset_y", enu_offset_y_, 0.0);
     pnh_.param("enu_offset_z", enu_offset_z_, 0.0);
     pnh_.param("iapf_safe_distance", iapf_safe_dist_, 1.0);
+    pnh_.param("neighbor_offset_multiplier", neighbor_offset_mult_, 3.0);
     pnh_.param("iapf_repulsion_gain", iapf_rep_gain_, 1.0);
 
     dt_ = 1.0 / control_freq_;
@@ -150,9 +151,11 @@ private:
 
   void neighborOdomCallback(const nav_msgs::Odometry::ConstPtr& msg, int neighbor_id)
   {
-    // MAVROS odom 已是 ENU 坐标，加上 spawn 偏移得到全局 ENU
+    // MAVROS odom 已是 ENU 坐标
+    // SITL 多机: 加上 Gazebo spawn 偏移 (neighbor_offset_multiplier=3.0)
+    // 实机 Nokov: 无需偏移 (neighbor_offset_multiplier=0.0)
     neighbor_positions_[neighbor_id] = Eigen::Vector3d(
-        msg->pose.pose.position.x + 3.0 * neighbor_id,  // ENU.x + offset
+        msg->pose.pose.position.x + neighbor_offset_mult_ * neighbor_id,
         msg->pose.pose.position.y,
         msg->pose.pose.position.z);
   }
@@ -549,6 +552,7 @@ private:
   double b0_x_, b0_y_, b0_z_;
   double max_vel_, max_acc_x_, max_acc_y_, max_acc_z_;
   double enu_offset_x_ = 0.0, enu_offset_y_ = 0.0, enu_offset_z_ = 0.0;
+  double neighbor_offset_mult_ = 3.0;  // SITL=3.0, 实机=0.0
   double iapf_safe_dist_ = 1.0, iapf_rep_gain_ = 1.0;
 
   // 命令数据

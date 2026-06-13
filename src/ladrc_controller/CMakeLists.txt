@@ -72,3 +72,9 @@ install(DIRECTORY config/
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
+
+# ---- Python 脚本 ----
+catkin_install_python(PROGRAMS
+  scripts/vrpn_vision_relay.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
