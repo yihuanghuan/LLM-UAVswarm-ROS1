@@ -9,6 +9,7 @@
   实机:
     Pixhawk USB 直连:           MAVROS → /dev/ttyACM0:921600
     Pixhawk TELEM2 串口:        MAVROS → /dev/ttyTHS1:921600 (Jetson 等)
+    ESP32 Wi-Fi TCP 桥接:       MAVROS → tcp://10.1.1.61:5760
 -->
 <launch>
   <arg name="uav_id" default="1" doc="无人机编号 (1-10)"/>
