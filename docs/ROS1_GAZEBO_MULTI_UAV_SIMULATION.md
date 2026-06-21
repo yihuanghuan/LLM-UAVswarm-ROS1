@@ -18,9 +18,13 @@ cd /home/yihuang/PX4-Autopilot
 
 ## 0. 推荐执行流程
 
-如果只是想直接跑完整仿真，按下面顺序执行即可。建议打开 4 个终端，前 2 个终端保持运行，不要关闭。
+如果只是想直接跑完整 LLM 编队仿真，最短必要流程是：步骤 2 → 步骤 3 → 步骤 6，结束后执行步骤 7。
 
-### 步骤 1：构建 ROS1 Docker 镜像和工作区
+步骤 1、4、5 是可选步骤，主要用于首次运行、代码变更后验证、或排障。建议至少打开 3 个终端：终端 A 跑 PX4 + Gazebo，终端 B 启动 ROS1/MAVROS/控制节点，终端 C 启动 LLM 调度终端。
+
+### 步骤 1（可选）：构建 ROS1 Docker 镜像和工作区
+
+首次运行、代码变更后、或 Docker 镜像/工作区不存在时执行。已经构建过且代码没有变化时可以跳过。
 
 终端 A：
 
@@ -31,9 +35,9 @@ cd "/home/yihuang/learning/ros1_ws（复件）"
 
 看到 `==> 编译完成` 后进入下一步。
 
-### 步骤 2：启动 8 机 PX4 + Gazebo Classic
+### 步骤 2（必要）：启动 8 机 PX4 + Gazebo Classic
 
-终端 B：
+终端 A：
 
 ```bash
 cd /home/yihuang/PX4-Autopilot
@@ -51,9 +55,9 @@ Spawning iris_8 at 0.0 24
 
 该终端必须保持运行。
 
-### 步骤 3：启动 ROS1、MAVROS 和 LADRC 控制节点
+### 步骤 3（必要）：启动 ROS1、MAVROS 和 LADRC 控制节点
 
-终端 C：
+终端 B：
 
 ```bash
 cd "/home/yihuang/learning/ros1_ws（复件）"
@@ -62,7 +66,9 @@ cd "/home/yihuang/learning/ros1_ws（复件）"
 
 该命令会在 Docker 容器 `ros1_multi_uav` 中自动启动 `roscore`、8 个 MAVROS 节点和 8 个 LADRC 控制节点。该终端命令返回后，容器会在后台继续运行。
 
-### 步骤 4：检查 8 机 ROS topic 和 MAVROS 状态
+### 步骤 4（可选）：检查 8 机 ROS topic 和 MAVROS 状态
+
+非必须。首次运行、换机器、改过网络/端口配置、或排障时建议执行。
 
 终端 D：
 
@@ -87,7 +93,9 @@ armed: True
 mode: "OFFBOARD"
 ```
 
-### 步骤 5：先用脚本做一次不经过 LLM 的 8 机飞行检查
+### 步骤 5（可选）：先用脚本做一次不经过 LLM 的 8 机飞行检查
+
+非必须。这个步骤用于单独验证底层 ROS1/MAVROS/Gazebo 控制链路，确认不用 LLM 时无人机也能稳定接收目标点并飞行。
 
 终端 D：
 
@@ -103,11 +111,9 @@ docker exec ros1_multi_uav bash -lc \
 ==> 指令飞行检查通过
 ```
 
-这一步用于确认底层 ROS1/MAVROS/Gazebo 控制链路没问题。
+### 步骤 6（必要）：启动 LLM 自然语言调度终端
 
-### 步骤 6：启动 LLM 自然语言调度终端
-
-终端 E：
+终端 C：
 
 ```bash
 cd "/home/yihuang/learning/ros1_ws（复件）"
@@ -117,6 +123,12 @@ nano .env.minimax
 ```
 
 把 `.env.minimax` 中的 `MINIMAX_API_KEY` 改为真实 Key；后续再次运行时不需要重复配置。`.env.minimax` 已被 Git 忽略，不会提交。也可以临时用 `export MINIMAX_API_KEY="your-api-key"` 覆盖。
+
+如果 `.env.minimax` 已经存在，可以跳过 `cp` 和 `nano`，直接执行：
+
+```bash
+./scripts/run_llm_scheduler.sh 8
+```
 
 如果使用默认 MiniMax 配置，不需要修改其他变量。如需指定接口或模型，可编辑 `.env.minimax`：
 
@@ -140,9 +152,9 @@ MINIMAX_MODEL_NAME=MiniMax-M2.7-highspeed
 
 继续输入下一条自然语言指令即可连续变阵；输入 `q` 退出调度终端。
 
-### 步骤 7：结束仿真并清理进程
+### 步骤 7（必要）：结束仿真并清理进程
 
-完成测试后执行：
+完成测试后执行，避免 Docker 容器、PX4 或 Gazebo 进程残留：
 
 ```bash
 docker rm -f ros1_multi_uav
