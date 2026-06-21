@@ -284,24 +284,49 @@ rostopic echo /uav1/odom -n 1
 '
 ```
 
-## 11. 启动调度节点
+## 11. 启动 LLM 调度节点
 
-如需测试调度层：
+LLM 调度节点对应项目 A `Claude.md` 中的“认知层 + 调度层”：自然语言指令先由 MiniMax/OpenAI 兼容 API 解析为 JSON 蓝图，再由 ROS1 Python 调度层生成目标点、执行匈牙利分配并发布 `swarm_command`。
 
-```bash
-docker exec -it ros1_multi_uav bash
-source /opt/ros/noetic/setup.bash
-source /ros1_ws/devel/setup.bash
-rosrun location_allocate location_allocate_node
-```
-
-如果启用 LLM 解析，先设置 API Key：
+先在宿主机设置真实 API Key：
 
 ```bash
 export MINIMAX_API_KEY="your-api-key"
 ```
 
-本轮没有调用外部 LLM API；多机飞行链路通过直接发布 `swarm_command` 完成验证。
+可选覆盖默认模型配置：
+
+```bash
+export MINIMAX_BASE_URL="https://api.minimax.chat/v1"
+export MINIMAX_MODEL_NAME="MiniMax-M2.7-highspeed"
+```
+
+启动 LLM 调度终端：
+
+```bash
+cd "/home/yihuang/learning/ros1_ws（复件）"
+./scripts/run_llm_scheduler.sh 8
+```
+
+看到提示后输入自然语言指令：
+
+```text
+1到5号机在10秒内以[0,12,2]为中心组成圆形编队，半径为3米，使用smooth模式
+```
+
+预期现象：
+
+- 终端打印 LLM 返回的 JSON 蓝图。
+- 调度层打印当前 UAV 位置、目标编队点和匈牙利分配结果。
+- `/uav1` 到 `/uav5` 收到 `swarm_command`。
+- Gazebo 中 UAV1-UAV5 自动变为圆形编队。
+- `/uav1/status` 到 `/uav5/status` 最终为 `is_hover_stable: True`。
+
+也可以用管道输入做自动化验收：
+
+```bash
+printf '1到5号机在10秒内以[0,12,2]为中心组成圆形编队，半径为3米，使用smooth模式\nq\n' | ./scripts/run_llm_scheduler.sh 8
+```
 
 ## 12. 关闭和清理
 
@@ -388,4 +413,18 @@ cd "/home/yihuang/learning/ros1_ws（复件）"
 cd "/home/yihuang/learning/ros1_ws（复件）"
 docker exec ros1_multi_uav bash -lc \
   "source /opt/ros/noetic/setup.bash && source /ros1_ws/devel/setup.bash && /ros1_ws/scripts/check_multi_uav_topics.sh 8 && /ros1_ws/scripts/check_multi_uav_runtime.sh 8 10 && /ros1_ws/scripts/check_multi_uav_command_flight.sh 8 1.5 8.0 150"
+```
+
+终端 4：真实 LLM 自然语言调度验收
+
+```bash
+cd "/home/yihuang/learning/ros1_ws（复件）"
+export MINIMAX_API_KEY="your-api-key"
+./scripts/run_llm_scheduler.sh 8
+```
+
+在提示符输入：
+
+```text
+1到5号机在10秒内以[0,12,2]为中心组成圆形编队，半径为3米，使用smooth模式
 ```

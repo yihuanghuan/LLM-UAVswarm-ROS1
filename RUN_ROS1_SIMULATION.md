@@ -98,27 +98,34 @@ roslaunch ladrc_controller swarm.launch \
   enable_uav9:=false enable_uav10:=false
 ```
 
-## 6. 启动调度节点
+## 6. 启动 LLM 调度节点
 
-进入容器：
-
-```bash
-docker exec -it ros1_multi_uav bash
-source /opt/ros/noetic/setup.bash
-source /ros1_ws/devel/setup.bash
-```
-
-如需要 LLM 解析，先设置：
+LLM 调度节点运行在 `ros1_multi_uav` 容器内，但 API Key 从宿主机环境变量传入。先在宿主机设置：
 
 ```bash
 export MINIMAX_API_KEY="your-api-key"
 ```
 
-启动：
+如需覆盖默认 MiniMax 配置，可选设置：
 
 ```bash
-rosrun location_allocate location_allocate_node
+export MINIMAX_BASE_URL="https://api.minimax.chat/v1"
+export MINIMAX_MODEL_NAME="MiniMax-M2.7-highspeed"
 ```
+
+启动 8 机 LLM 调度终端：
+
+```bash
+./scripts/run_llm_scheduler.sh 8
+```
+
+看到 `请输入无人机编队指令:` 后输入自然语言，例如：
+
+```text
+1到5号机在10秒内以[0,12,2]为中心组成圆形编队，半径为3米，使用smooth模式
+```
+
+调度节点会调用真实 LLM API，打印 JSON 蓝图，执行匈牙利分配，并向 `/uavN/swarm_command` 下发目标点。
 
 ## 7. 检查 node / topic / param
 

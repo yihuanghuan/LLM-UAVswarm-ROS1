@@ -85,6 +85,7 @@ Docker 环境：
 - `scripts/check_multi_uav_topics.sh`
 - `scripts/check_multi_uav_runtime.sh`
 - `scripts/run_multi_uav_sim.sh`
+- `scripts/run_llm_scheduler.sh`
 - `MIGRATION_REPORT.md`
 - `RUN_ROS1_SIMULATION.md`
 
@@ -112,9 +113,15 @@ Docker 环境：
 - SITL 多机邻居偏移修正为 Y 轴。
 - ROS1 参数文件改为扁平结构，避免 `<rosparam>` 加载到错误层级。
 
-`location_allocate.py` 保持 FormationGenerator、TopologyAllocator、任务调度逻辑，修复 Python 3 运行入口：
+`location_allocate.py` 按项目 A `Claude.md` 的“认知层 + 调度层”架构迁移到 ROS1：
 
 - `raw_input()` 改为 `input()`。
+- 保持 FormationGenerator、TopologyAllocator、串行/并行任务编排和悬停闭环反馈逻辑。
+- 从 ROS 私有参数 `~uav_ids` 或 `~uav_count` 读取当前启用 UAV，默认 8 机，不再固定把 LLM 情报告知为 10 机。
+- 启动后等待启用 UAV 的 `/uavN/odom` 首帧数据，再进入自然语言输入循环。
+- 对 LLM 输出的 `uav_id` 做启用集合校验，并按 `uav_id` 修正 `uav_count`。
+- `no_location.py` 从 `MINIMAX_API_KEY`、`MINIMAX_BASE_URL`、`MINIMAX_MODEL_NAME` 读取真实 LLM API 配置，不复制项目 A 的硬编码 Key。
+- `scripts/run_llm_scheduler.sh` 将宿主机 LLM 环境变量传入 Docker 容器并启动 `location_allocate_node`。
 - Dockerfile 补齐 `scipy`、`openai`、`httpx` 运行依赖。
 
 ## 8. 多无人机 namespace 设计
@@ -168,23 +175,32 @@ docker exec ros1_multi_uav bash -lc "source /opt/ros/noetic/setup.bash && source
 - 启动后完成一次 topic + runtime 检查，并在额外等待 60 秒后再次执行 runtime 检查，两次均通过。
 - 通过 `/uav1/swarm_command` 到 `/uav8/swarm_command` 发布 8 机目标点 `[0.0, 3.0*N, 1.5]`，8 架无人机均反馈 `is_hover_stable: True`。
 - 指令飞行后的最终采样位置接近 `x≈0`、`y≈3.0*N`、`z≈1.65-1.73`。
+- LLM 调度节点已支持如下验收入口：
+
+```bash
+export MINIMAX_API_KEY="your-api-key"
+./scripts/run_llm_scheduler.sh 8
+```
+
+在提示符输入自然语言指令后，节点会调用真实 LLM API、打印 JSON 蓝图、执行匈牙利分配并下发 `/uavN/swarm_command`。
 
 未完全确认：
 
+- 当前终端环境未设置 `MINIMAX_API_KEY`，因此未在本机完成真实外部 API 调用验收。
 - 未验证 10 机全量仿真性能。
 - 未验证 Gazebo GUI。
 
 ## 11. 已知问题
 
 - 多机实机模式不能复用单个 `fcu_url_real` 同时连接多台无人机，需要按硬件 IP/串口拆分配置。
-- LLM 调度层需要 `MINIMAX_API_KEY`，本轮未调用外部 API 做端到端自然语言任务验证。
+- LLM 调度层需要宿主机设置 `MINIMAX_API_KEY`，并由 `scripts/run_llm_scheduler.sh` 传入容器。
 - PX4/Gazebo Classic 环境中加载了 ROS2 Humble 的 Gazebo ROS 插件路径，headless spawn 可用，但 GUI 或插件冲突仍需人工确认。
 - `task_for_codex.md` 仍是本地未跟踪文件，未提交。
 
 ## 12. 后续人工检查建议
 
 1. 扩展到 10 机，检查 CPU、Gazebo 实时率和 topic 冲突。
-2. 设置 `MINIMAX_API_KEY` 后运行 `rosrun location_allocate location_allocate_node` 做自然语言调度端到端测试。
+2. 设置 `MINIMAX_API_KEY` 后运行 `./scripts/run_llm_scheduler.sh 8` 做真实 LLM 自然语言调度端到端测试。
 3. 实机多机前，按每架飞机实际 MAVLink 地址拆分 launch。
 
 ## 13. Git 提交记录
@@ -206,4 +222,6 @@ docker exec ros1_multi_uav bash -lc "source /opt/ros/noetic/setup.bash && source
 | `994ba29` | `fix: 稳定多机 MAVROS 连接和运行时检查` | 多机 launch、控制状态机、runtime 检查脚本 | 8 机 topic/runtime 验证通过 |
 | `b2ffd6a` | `docs: 更新 8 机 Gazebo 验证结果` | 迁移报告、运行说明 | 8 机延迟 runtime 复查通过 |
 | `b9172c7` | `test: 添加 8 机指令飞行验证脚本` | 指令飞行检查脚本 | 8 机 `swarm_command` 验证通过 |
-| 本提交 | `docs: 添加 ROS1 多机 Gazebo 仿真指南` | 详细仿真说明文档、迁移报告 | 终端三层验证通过 |
+| `74b6b02` | `docs: 添加 ROS1 多机 Gazebo 仿真指南` | 详细仿真说明文档、迁移报告 | 终端三层验证通过 |
+| `b9b470a` | `feat: 补齐 ROS1 LLM 调度入口` | 调度节点、LLM 启动脚本 | 静态检查、Docker 编译、缺 Key/缺容器检查通过 |
+| 本提交 | `docs: 更新 LLM 调度层运行说明` | 迁移报告、仿真运行文档 | 记录真实 LLM API 验收步骤 |
