@@ -56,13 +56,13 @@ make px4_sitl gazebo-classic
 
 ```bash
 cd ~/PX4-Autopilot
-Tools/simulation/gazebo-classic/sitl_multiple_run.sh -n 2 -m iris
+Tools/simulation/gazebo-classic/sitl_multiple_run.sh -n 8 -m iris
 ```
 
 如只做有限时间验证：
 
 ```bash
-timeout 140s Tools/simulation/gazebo-classic/sitl_multiple_run.sh -n 2 -m iris
+timeout 240s Tools/simulation/gazebo-classic/sitl_multiple_run.sh -n 8 -m iris
 ```
 
 ## 5. 启动 MAVROS 和控制节点
@@ -84,7 +84,7 @@ roslaunch ladrc_controller single_uav.launch uav_id:=1 enu_offset_y:=0.0
 先启动 PX4 多机 SITL，再执行：
 
 ```bash
-./scripts/run_multi_uav_sim.sh 2
+./scripts/run_multi_uav_sim.sh 8
 ```
 
 默认最多支持 UAV1-UAV10。只启用部分无人机时，脚本会自动向 `swarm.launch` 传入 `enable_uavN:=false`。
@@ -122,11 +122,18 @@ rosrun location_allocate location_allocate_node
 
 ## 7. 检查 node / topic / param
 
-检查 2 机 topic：
+检查 8 机 topic：
 
 ```bash
 docker exec ros1_multi_uav bash -lc \
-  "source /opt/ros/noetic/setup.bash && source /ros1_ws/devel/setup.bash && /ros1_ws/scripts/check_multi_uav_topics.sh 2"
+  "source /opt/ros/noetic/setup.bash && source /ros1_ws/devel/setup.bash && /ros1_ws/scripts/check_multi_uav_topics.sh 8"
+```
+
+检查 8 机 MAVROS 运行时连接、odom 和 offboard 状态：
+
+```bash
+docker exec ros1_multi_uav bash -lc \
+  "source /opt/ros/noetic/setup.bash && source /ros1_ws/devel/setup.bash && /ros1_ws/scripts/check_multi_uav_runtime.sh 8 10"
 ```
 
 手动检查：
@@ -181,7 +188,7 @@ SITL 应显示：
 
 ### topic 存在但 `mavros/state` 未连接
 
-检查 PX4 多机脚本是否正在运行，并确认端口匹配：
+检查 PX4 多机脚本是否正在运行，并确认端口和 target system id 匹配：
 
 ```bash
 tail -80 ~/PX4-Autopilot/build/px4_sitl_default/rootfs/0/out.log
@@ -193,6 +200,8 @@ PX4 instance 1 预期包含：
 ```text
 udp port 14581 remote port 14541
 ```
+
+ROS1 SITL 模式下 `swarm.launch` 使用 `target_system_id=N+1`，即 UAV1 对应 PX4 system id 2；实机模式仍使用 `target_system_id=N`。
 
 ### LLM 调度节点 import 失败
 

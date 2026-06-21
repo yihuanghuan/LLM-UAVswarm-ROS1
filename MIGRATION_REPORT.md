@@ -71,6 +71,7 @@ Docker 环境：
 - UAV1：`udp://:14541@127.0.0.1:14581`
 - UAV2：`udp://:14542@127.0.0.1:14582`
 - 通用：本地 companion 端口 `14540 + N`，PX4 onboard 端口 `14580 + N`。
+- PX4 多机脚本中 UAV1 对应 `MAV_SYS_ID=2`，因此 `swarm.launch` 在 `use_sim=true` 时使用 `target_system_id=N+1`；实机模式仍保持 `target_system_id=N`。
 
 ## 6. 修改文件清单
 
@@ -80,6 +81,7 @@ Docker 环境：
 - `docs/ROS1_MIGRATION_PLAN.md`
 - `scripts/build_ros1_ws.sh`
 - `scripts/check_multi_uav_topics.sh`
+- `scripts/check_multi_uav_runtime.sh`
 - `scripts/run_multi_uav_sim.sh`
 - `MIGRATION_REPORT.md`
 - `RUN_ROS1_SIMULATION.md`
@@ -144,26 +146,27 @@ Docker 环境：
 
 ## 10. Gazebo 仿真验证结果
 
-已执行 headless 2 机验证：
+已执行 8 机 Gazebo Classic + PX4 SITL + ROS1/MAVROS 验证：
 
 ```bash
-timeout 140s /home/yihuang/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_multiple_run.sh -n 2 -m iris
-./scripts/run_multi_uav_sim.sh 2
-docker exec ros1_multi_uav bash -lc "source /opt/ros/noetic/setup.bash && source /ros1_ws/devel/setup.bash && /ros1_ws/scripts/check_multi_uav_topics.sh 2"
+/home/yihuang/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_multiple_run.sh -n 8 -m iris
+./scripts/run_multi_uav_sim.sh 8
+docker exec ros1_multi_uav bash -lc "source /opt/ros/noetic/setup.bash && source /ros1_ws/devel/setup.bash && /ros1_ws/scripts/check_multi_uav_topics.sh 8 && /ros1_ws/scripts/check_multi_uav_runtime.sh 8 10"
 ```
 
 已验证：
 
 - Gazebo Classic `gzserver` 启动。
-- `iris_1`、`iris_2` spawn 成功。
-- `/uav1/mavros`、`/uav2/mavros` 节点出现。
-- `/uav1/ladrc_position_controller`、`/uav2/ladrc_position_controller` 节点出现。
-- `/uav1`、`/uav2` 的 MAVROS、setpoint、status、odom、swarm_command topic 出现。
-- `/uav1/odom` 和 `/uav2/odom` 有数据，Y 坐标分别约为 3m 和 6m，符合 Gazebo spawn 偏移规则。
+- `iris_1` 到 `iris_8` spawn 成功，Y 轴位置分别约为 3m、6m、9m、12m、15m、18m、21m、24m。
+- `/uav1/mavros` 到 `/uav8/mavros` 节点出现。
+- `/uav1/ladrc_position_controller` 到 `/uav8/ladrc_position_controller` 节点出现。
+- `/uav1` 到 `/uav8` 的 MAVROS、setpoint、status、odom、swarm_command topic 全部出现。
+- `/uav1/odom` 到 `/uav8/odom` 均有数据，Y 坐标符合 Gazebo spawn 偏移规则。
+- `/uav1/mavros/state` 到 `/uav8/mavros/state` 均为 `connected: True`、`armed: True`、`mode: "OFFBOARD"`。
+- 启动后完成一次 topic + runtime 检查，并在额外等待 60 秒后再次执行 runtime 检查，两次均通过。
 
 未完全确认：
 
-- 短时间窗口内 `/uav1/mavros/state` 和 `/uav2/mavros/state` 首条采样仍显示 `connected: False`，但 odom 已有数据。需要更长时间窗口或人工观察 MAVROS 日志进一步确认 heartbeat 状态。
 - 未执行完整 `swarm_command` 轨迹跟踪飞行。
 - 未验证 10 机全量仿真性能。
 - 未验证 Gazebo GUI。
@@ -177,11 +180,10 @@ docker exec ros1_multi_uav bash -lc "source /opt/ros/noetic/setup.bash && source
 
 ## 12. 后续人工检查建议
 
-1. 用更长时间运行 2 机 SITL，观察 `/uav{N}/mavros/state` 是否稳定为 `connected: True`。
-2. 发送 `/uav1/swarm_command` 和 `/uav2/swarm_command`，观察 `status` 是否变为稳定悬停。
-3. 逐步扩展到 3、5、10 机，检查 CPU、Gazebo 实时率和 topic 冲突。
-4. 设置 `MINIMAX_API_KEY` 后运行 `rosrun location_allocate location_allocate_node` 做自然语言调度端到端测试。
-5. 实机多机前，按每架飞机实际 MAVLink 地址拆分 launch。
+1. 发送 `/uav{N}/swarm_command`，观察轨迹跟踪和 `status.is_hover_stable`。
+2. 扩展到 10 机，检查 CPU、Gazebo 实时率和 topic 冲突。
+3. 设置 `MINIMAX_API_KEY` 后运行 `rosrun location_allocate location_allocate_node` 做自然语言调度端到端测试。
+4. 实机多机前，按每架飞机实际 MAVLink 地址拆分 launch。
 
 ## 13. Git 提交记录
 
@@ -198,3 +200,6 @@ docker exec ros1_multi_uav bash -lc "source /opt/ros/noetic/setup.bash && source
 | `0f2bfa5` | `fix: 固定调度层 Python 依赖版本` | Dockerfile | Docker build 通过 |
 | `02d1bf9` | `fix: 修复 launch 仿真模式参数判断` | 单机/多机 launch | dump-params 验证 UDP 分支 |
 | `02a4436` | `fix: 修正多机 SITL MAVROS 端口映射` | 多机 launch、计划文档 | 2 机 topic/odom 验证通过 |
+| `d7e0d03` | `docs: 添加 ROS1 迁移报告和运行说明` | 迁移报告、运行说明 | 已推送 |
+| `994ba29` | `fix: 稳定多机 MAVROS 连接和运行时检查` | 多机 launch、控制状态机、runtime 检查脚本 | 8 机 topic/runtime 验证通过 |
+| 本提交 | `docs: 更新 8 机 Gazebo 验证结果` | 迁移报告、运行说明 | 8 机延迟 runtime 复查通过 |
