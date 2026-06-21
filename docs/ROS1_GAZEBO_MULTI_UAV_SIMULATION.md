@@ -16,6 +16,146 @@ PX4 路径：
 cd /home/yihuang/PX4-Autopilot
 ```
 
+## 0. 推荐执行流程
+
+如果只是想直接跑完整仿真，按下面顺序执行即可。建议打开 4 个终端，前 2 个终端保持运行，不要关闭。
+
+### 步骤 1：构建 ROS1 Docker 镜像和工作区
+
+终端 A：
+
+```bash
+cd "/home/yihuang/learning/ros1_ws（复件）"
+./scripts/build_ros1_ws.sh
+```
+
+看到 `==> 编译完成` 后进入下一步。
+
+### 步骤 2：启动 8 机 PX4 + Gazebo Classic
+
+终端 B：
+
+```bash
+cd /home/yihuang/PX4-Autopilot
+Tools/simulation/gazebo-classic/sitl_multiple_run.sh -n 8 -m iris
+```
+
+等待终端出现以下输出：
+
+```text
+Spawning iris_1 at 0.0 3
+Spawning iris_2 at 0.0 6
+...
+Spawning iris_8 at 0.0 24
+```
+
+该终端必须保持运行。
+
+### 步骤 3：启动 ROS1、MAVROS 和 LADRC 控制节点
+
+终端 C：
+
+```bash
+cd "/home/yihuang/learning/ros1_ws（复件）"
+./scripts/run_multi_uav_sim.sh 8
+```
+
+该命令会在 Docker 容器 `ros1_multi_uav` 中自动启动 `roscore`、8 个 MAVROS 节点和 8 个 LADRC 控制节点。该终端命令返回后，容器会在后台继续运行。
+
+### 步骤 4：检查 8 机 ROS topic 和 MAVROS 状态
+
+终端 D：
+
+```bash
+cd "/home/yihuang/learning/ros1_ws（复件）"
+docker exec ros1_multi_uav bash -lc \
+  "source /opt/ros/noetic/setup.bash && source /ros1_ws/devel/setup.bash && /ros1_ws/scripts/check_multi_uav_topics.sh 8 && /ros1_ws/scripts/check_multi_uav_runtime.sh 8 10"
+```
+
+成功标志：
+
+```text
+==> 检查通过
+==> 运行时检查通过
+```
+
+并且每架无人机应显示：
+
+```text
+connected: True
+armed: True
+mode: "OFFBOARD"
+```
+
+### 步骤 5：先用脚本做一次不经过 LLM 的 8 机飞行检查
+
+终端 D：
+
+```bash
+docker exec ros1_multi_uav bash -lc \
+  "source /opt/ros/noetic/setup.bash && source /ros1_ws/devel/setup.bash && /ros1_ws/scripts/check_multi_uav_command_flight.sh 8 1.5 8.0 150"
+```
+
+成功标志：
+
+```text
+稳定悬停进度: 8/8
+==> 指令飞行检查通过
+```
+
+这一步用于确认底层 ROS1/MAVROS/Gazebo 控制链路没问题。
+
+### 步骤 6：启动 LLM 自然语言调度终端
+
+终端 E：
+
+```bash
+cd "/home/yihuang/learning/ros1_ws（复件）"
+export MINIMAX_API_KEY="your-api-key"
+./scripts/run_llm_scheduler.sh 8
+```
+
+如果使用默认 MiniMax 配置，不需要设置其他变量。如需指定接口或模型，可在启动前加：
+
+```bash
+export MINIMAX_BASE_URL="https://api.minimax.chat/v1"
+export MINIMAX_MODEL_NAME="MiniMax-M2.7-highspeed"
+```
+
+看到提示后输入自然语言：
+
+```text
+1到5号机在10秒内以[0,12,2]为中心组成圆形编队，半径为3米，使用smooth模式
+```
+
+成功标志：
+
+- 终端打印 LLM 返回的 JSON 蓝图。
+- 调度层打印匈牙利分配结果。
+- Gazebo 中 UAV1-UAV5 自动变成圆形编队。
+- 终端最终打印全部参与无人机悬停稳定。
+
+继续输入下一条自然语言指令即可连续变阵；输入 `q` 退出调度终端。
+
+### 步骤 7：结束仿真并清理进程
+
+完成测试后执行：
+
+```bash
+docker rm -f ros1_multi_uav
+pkill -x gzclient || true
+pkill -x gzserver || true
+pkill -x px4 || true
+pkill -f 'sitl_multiple_run.sh -n 8 -m iris' || true
+```
+
+确认已清理：
+
+```bash
+docker ps --format '{{.Names}} {{.Status}}'
+ps -ef | rg 'px4|gzserver|gzclient|gazebo'
+```
+
 ## 1. 已验证结论
 
 本轮已通过终端自主完成 8 机仿真验证：
