@@ -331,7 +331,7 @@ def main():
 
     try:
         while not rospy.is_shutdown():
-            user_command = raw_input("\n请输入无人机编队指令: ")
+            user_command = input("\n请输入无人机编队指令: ")
 
             if user_command.strip().lower() in ["exit", "quit", "q"]:
                 break
