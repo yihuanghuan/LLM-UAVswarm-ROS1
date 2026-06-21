@@ -27,14 +27,39 @@ from geometry_msgs.msg import Point
 # --------------------
 from location_allocate.no_location import parse_uav_command
 
-# ====================== 硬编码：无人机初始坐标 + ID ======================
-all_uav_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+# ====================== 默认无人机初始坐标 + ID ======================
+default_uav_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 all_initial_positions = [
     [1.4, 0.0, 1.5], [-0.7, 1.2, 1.5], [-0.7, -1.2, 1.5],
     [1.4, 0.0, 3.0], [-0.7, 1.2, 3.0], [-0.7, -1.2, 3.0],
     [-0.7, 1.2, 4.0], [-0.7, -1.2, 4.0], [1.4, 0.0, 1.0],
     [-0.7, 1.2, 1.0]
 ]
+
+
+def load_uav_ids() -> List[int]:
+    """从 ROS 参数读取当前启用的 UAV 列表，默认使用 8 机 SITL。"""
+    raw_ids = rospy.get_param("~uav_ids", None)
+    if raw_ids is not None:
+        if isinstance(raw_ids, str):
+            ids = [int(item.strip()) for item in raw_ids.split(",") if item.strip()]
+        elif isinstance(raw_ids, list):
+            ids = [int(item) for item in raw_ids]
+        else:
+            raise ValueError("~uav_ids 必须是列表或逗号分隔字符串")
+    else:
+        uav_count = int(rospy.get_param("~uav_count", 8))
+        ids = list(range(1, uav_count + 1))
+
+    if not ids or min(ids) < 1 or max(ids) > len(default_uav_ids):
+        raise ValueError("UAV 编号范围必须在 1-{} 内，实际: {}".format(len(default_uav_ids), ids))
+    if len(set(ids)) != len(ids):
+        raise ValueError("UAV 编号不能重复: {}".format(ids))
+    return sorted(ids)
+
+
+def build_ros_aux_info(uav_ids: List[int]) -> str:
+    return "当前可用无人机编号: {}，总数: {}".format(uav_ids, len(uav_ids))
 
 # ====================== 1. 坐标生成层 (不变) ======================
 class FormationGenerator:
@@ -107,30 +132,38 @@ class TopologyAllocator:
 
 # ====================== 3. ROS1 核心调度层 ======================
 class UAVFormationNode:
-    def __init__(self):
+    def __init__(self, uav_ids: List[int]):
+        self.uav_ids = uav_ids
+        self.uav_id_set = set(uav_ids)
+
         # 状态变量：由 C++ 节点低频发布的 /uav{id}/odom 实时更新
         self.uav_state_map: Dict[int, List[float]] = {}
-        for uid in all_uav_ids:
+        self.has_odom: Dict[int, bool] = {}
+        for uid in self.uav_ids:
             self.uav_state_map[uid] = [0.0, 0.0, 0.0]
+            self.has_odom[uid] = False
 
         # ---- 发布者 ----
         self.publisher = {}
-        for uid in all_uav_ids:
+        for uid in self.uav_ids:
             topic_name = '/uav{}/swarm_command'.format(uid)
             self.publisher[uid] = rospy.Publisher(topic_name, UAVSwarmCommand, queue_size=10)
             rospy.loginfo("创建发布者: {}".format(topic_name))
 
         # ---- 订阅者 (odom 位置 + status 状态) ----
         self.uav_hover_status: Dict[int, bool] = {}
-        for uid in all_uav_ids:
+        self.subscribers = []
+        for uid in self.uav_ids:
             self.uav_hover_status[uid] = False
             # 订阅悬停状态 (callback_args 传递 uid)
             topic_name = '/uav{}/status'.format(uid)
-            rospy.Subscriber(topic_name, UAVStatus, self._status_callback, callback_args=uid)
+            self.subscribers.append(rospy.Subscriber(topic_name, UAVStatus, self._status_callback, callback_args=uid))
             # 订阅 ENU 位置
             topic_name = '/uav{}/odom'.format(uid)
-            rospy.Subscriber(topic_name, Point, self._odom_callback, callback_args=uid)
+            self.subscribers.append(rospy.Subscriber(topic_name, Point, self._odom_callback, callback_args=uid))
             rospy.loginfo("创建订阅者: /uav{}/status, /uav{}/odom".format(uid, uid))
+
+        rospy.loginfo("LLM 调度层启用 UAV: {}".format(self.uav_ids))
 
     def _publish_single_goal(self, uav_id: int, position: List[float],
                              duration: float, motion_style: str, safety_factor: float):
@@ -161,6 +194,50 @@ class UAVFormationNode:
     def _odom_callback(self, msg: Point, uid: int):
         """接收 C++ 节点低频发布的 ENU 位置"""
         self.uav_state_map[uid] = [msg.x, msg.y, msg.z]
+        self.has_odom[uid] = True
+
+    def wait_for_initial_odom(self, timeout: float = 60.0) -> bool:
+        """等待所有启用 UAV 至少收到一帧 odom。"""
+        rospy.loginfo("等待启用 UAV 的 /uavN/odom 首帧数据，超时 {}s ...".format(timeout))
+        start_time = time.time()
+        while not rospy.is_shutdown() and time.time() - start_time < timeout:
+            missing = [uid for uid in self.uav_ids if not self.has_odom.get(uid, False)]
+            if not missing:
+                rospy.loginfo("已收到全部启用 UAV 的 odom 数据")
+                return True
+            rospy.loginfo_throttle(5.0, "仍在等待 odom: {}".format(missing))
+            rospy.sleep(0.2)
+
+        missing = [uid for uid in self.uav_ids if not self.has_odom.get(uid, False)]
+        rospy.logerr("等待 odom 超时，缺失 UAV: {}".format(missing))
+        return False
+
+    def validate_task(self, task: Dict) -> bool:
+        """校验并规范化 LLM 输出的单个任务。"""
+        task_uav_ids = task.get('uav_id', [])
+        if not isinstance(task_uav_ids, list) or not task_uav_ids:
+            rospy.logerr("任务 {} 缺少有效 uav_id: {}".format(task.get('task_sequence_id'), task_uav_ids))
+            return False
+
+        try:
+            task_uav_ids = [int(uid) for uid in task_uav_ids]
+        except Exception:
+            rospy.logerr("任务 {} 的 uav_id 无法转为整数: {}".format(task.get('task_sequence_id'), task_uav_ids))
+            return False
+
+        invalid = [uid for uid in task_uav_ids if uid not in self.uav_id_set]
+        if invalid:
+            rospy.logerr("任务 {} 包含未启用 UAV: {}，当前启用: {}".format(
+                task.get('task_sequence_id'), invalid, self.uav_ids))
+            return False
+
+        if len(set(task_uav_ids)) != len(task_uav_ids):
+            rospy.logerr("任务 {} 包含重复 UAV: {}".format(task.get('task_sequence_id'), task_uav_ids))
+            return False
+
+        task['uav_id'] = task_uav_ids
+        task['uav_count'] = len(task_uav_ids)
+        return True
 
     def send_goal_positions(self, task_uav_ids: List[int], allocated_positions: List[List[float]],
                             task: Dict):
@@ -256,7 +333,7 @@ class UAVFormationNode:
             rospy.loginfo("编队类型: Free (返回初始点)")
             targets = []
             for uid in task_uav_ids:
-                idx = all_uav_ids.index(uid)
+                idx = default_uav_ids.index(uid)
                 targets.append(all_initial_positions[idx].copy())
         else:
             rospy.loginfo("编队类型: {} | 中心: {} | 半径: {}".format(f_type, center, radius))
@@ -289,6 +366,15 @@ class UAVFormationNode:
         if not tasks:
             rospy.logerr("LLM 输出为空，没有任务可执行")
             return
+
+        valid_tasks = []
+        for task in tasks:
+            if self.validate_task(task):
+                valid_tasks.append(task)
+        if not valid_tasks:
+            rospy.logerr("LLM 输出中没有可执行任务")
+            return
+        tasks = valid_tasks
 
         i = 0
         while i < len(tasks):
@@ -326,8 +412,19 @@ class UAVFormationNode:
 def main():
     rospy.init_node('location_allocate')
 
-    test_ros = "当前可用无人机编号: [1,2,3,4,5,6,7,8,9,10]，总数: 10"
-    node = UAVFormationNode()
+    try:
+        uav_ids = load_uav_ids()
+    except Exception as exc:
+        rospy.logerr("读取 UAV 配置失败: {}".format(exc))
+        return
+
+    ros_aux_info = build_ros_aux_info(uav_ids)
+    rospy.loginfo("LLM ROS 实时情报: {}".format(ros_aux_info))
+
+    node = UAVFormationNode(uav_ids)
+    if not node.wait_for_initial_odom():
+        rospy.logerr("调度层启动失败：未收到全部启用 UAV 的 odom")
+        return
 
     try:
         while not rospy.is_shutdown():
@@ -340,7 +437,11 @@ def main():
                 continue
 
             rospy.loginfo("正在调用 LLM 解析指令...")
-            llm_result = parse_uav_command(user_command, test_ros)
+            try:
+                llm_result = parse_uav_command(user_command, ros_aux_info)
+            except Exception as exc:
+                rospy.logerr("LLM 解析失败: {}".format(exc))
+                continue
 
             rospy.loginfo("=" * 50)
             rospy.loginfo("最终解析结果：")
