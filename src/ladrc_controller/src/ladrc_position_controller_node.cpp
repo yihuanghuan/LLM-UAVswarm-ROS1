@@ -285,7 +285,14 @@ private:
     {
     case FlightState::INIT:
     {
-      // 等待 MAVROS 连接并收到 state、odom
+      // 等待 MAVROS 连接并收到 odom，期间 controlLoop 会持续发布预热 setpoint
+      if (!current_state_.connected || !has_odom_)
+      {
+        ROS_WARN_THROTTLE(5.0, "等待 MAVROS 连接和 odom 数据...");
+        offboard_setpoint_counter_ = 0;
+        break;
+      }
+
       if (offboard_setpoint_counter_++ > 100)  // 10s @ 10Hz
       {
         ROS_INFO("系统稳定，发送解锁命令...");
@@ -307,6 +314,14 @@ private:
 
     case FlightState::ARMING:
     {
+      if (!current_state_.connected)
+      {
+        ROS_WARN_THROTTLE(5.0, "MAVROS 连接丢失，回到初始化状态...");
+        flight_state_ = FlightState::INIT;
+        offboard_setpoint_counter_ = 0;
+        break;
+      }
+
       // 检查是否已解锁
       if (current_state_.armed)
       {
@@ -333,6 +348,14 @@ private:
 
     case FlightState::SETTING_OFFBOARD:
     {
+      if (!current_state_.connected)
+      {
+        ROS_WARN_THROTTLE(5.0, "MAVROS 连接丢失，回到初始化状态...");
+        flight_state_ = FlightState::INIT;
+        offboard_setpoint_counter_ = 0;
+        break;
+      }
+
       // 检查是否已进入 offboard 模式
       if (current_state_.mode == "OFFBOARD" && current_state_.armed)
       {
