@@ -94,8 +94,8 @@ ROS2 YAML 中的 `/**: ros__parameters:` 需要改为 ROS1 `<rosparam>` 可加�
   - `/uav{N}/mavros`
   - `/uav{N}/ladrc_position_controller`
 - SITL 默认 MAVROS 端口：
-  - 本地端口：`14540 + 10 * (N - 1)`
-  - PX4 远端端口：`14579 + N`
+  - 本地 companion 端口：`14540 + N`
+  - PX4 onboard 端口：`14580 + N`
 - `target_system_id = N`。
 - Gazebo spawn 偏移沿 Y 轴补偿：`enu_offset_y = 3.0 * N`。
 - 实机模式保留 `use_sim:=false`，但单个 `fcu_url_real` 不能同时代表多台实机；多机实机接入需后续按硬件 IP/串口单独配置。
