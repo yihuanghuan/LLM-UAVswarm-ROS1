@@ -27,7 +27,8 @@ echo "前提: 确保终端 1 已启动 PX4 SITL + Gazebo"
 echo "      cd ~/PX4-Autopilot && make px4_sitl gazebo-classic"
 echo ""
 
-WS=/home/yihuang/learning/ros1_ws
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WS="${ROS1_WS:-$SCRIPT_DIR}"
 
 # 1. 编译 (如果还没编译)
 echo "[1/3] 编译 ROS1 代码..."
