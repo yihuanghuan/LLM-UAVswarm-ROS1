@@ -31,7 +31,7 @@
 
   <group if="$(arg enable_uav1)" ns="uav1">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14540@127.0.0.1:14580' if arg('use_sim') == 'true' else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="$(eval 'udp://:14540@127.0.0.1:14580' if arg('use_sim') else arg('fcu_url_real'))"/>
       <param name="gcs_url" value=""/>
       <param name="target_system_id" value="1"/>
       <param name="target_component_id" value="1"/>
@@ -39,15 +39,15 @@
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="enu_offset_y" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 
   <group if="$(arg enable_uav2)" ns="uav2">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14550@127.0.0.1:14581' if arg('use_sim') == 'true' else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="$(eval 'udp://:14550@127.0.0.1:14581' if arg('use_sim') else arg('fcu_url_real'))"/>
       <param name="gcs_url" value=""/>
       <param name="target_system_id" value="2"/>
       <param name="target_component_id" value="1"/>
@@ -55,15 +55,15 @@
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 6.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="enu_offset_y" value="$(eval 6.0 if arg('use_sim') else 0.0)"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 
   <group if="$(arg enable_uav3)" ns="uav3">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14560@127.0.0.1:14582' if arg('use_sim') == 'true' else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="$(eval 'udp://:14560@127.0.0.1:14582' if arg('use_sim') else arg('fcu_url_real'))"/>
       <param name="gcs_url" value=""/>
       <param name="target_system_id" value="3"/>
       <param name="target_component_id" value="1"/>
@@ -71,15 +71,15 @@
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 9.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="enu_offset_y" value="$(eval 9.0 if arg('use_sim') else 0.0)"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 
   <group if="$(arg enable_uav4)" ns="uav4">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14570@127.0.0.1:14583' if arg('use_sim') == 'true' else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="$(eval 'udp://:14570@127.0.0.1:14583' if arg('use_sim') else arg('fcu_url_real'))"/>
       <param name="gcs_url" value=""/>
       <param name="target_system_id" value="4"/>
       <param name="target_component_id" value="1"/>
@@ -87,15 +87,15 @@
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 12.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="enu_offset_y" value="$(eval 12.0 if arg('use_sim') else 0.0)"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 
   <group if="$(arg enable_uav5)" ns="uav5">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14580@127.0.0.1:14584' if arg('use_sim') == 'true' else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="$(eval 'udp://:14580@127.0.0.1:14584' if arg('use_sim') else arg('fcu_url_real'))"/>
       <param name="gcs_url" value=""/>
       <param name="target_system_id" value="5"/>
       <param name="target_component_id" value="1"/>
@@ -103,15 +103,15 @@
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 15.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="enu_offset_y" value="$(eval 15.0 if arg('use_sim') else 0.0)"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 
   <group if="$(arg enable_uav6)" ns="uav6">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14590@127.0.0.1:14585' if arg('use_sim') == 'true' else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="$(eval 'udp://:14590@127.0.0.1:14585' if arg('use_sim') else arg('fcu_url_real'))"/>
       <param name="gcs_url" value=""/>
       <param name="target_system_id" value="6"/>
       <param name="target_component_id" value="1"/>
@@ -119,15 +119,15 @@
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 18.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="enu_offset_y" value="$(eval 18.0 if arg('use_sim') else 0.0)"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 
   <group if="$(arg enable_uav7)" ns="uav7">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14600@127.0.0.1:14586' if arg('use_sim') == 'true' else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="$(eval 'udp://:14600@127.0.0.1:14586' if arg('use_sim') else arg('fcu_url_real'))"/>
       <param name="gcs_url" value=""/>
       <param name="target_system_id" value="7"/>
       <param name="target_component_id" value="1"/>
@@ -135,15 +135,15 @@
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 21.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="enu_offset_y" value="$(eval 21.0 if arg('use_sim') else 0.0)"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 
   <group if="$(arg enable_uav8)" ns="uav8">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14610@127.0.0.1:14587' if arg('use_sim') == 'true' else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="$(eval 'udp://:14610@127.0.0.1:14587' if arg('use_sim') else arg('fcu_url_real'))"/>
       <param name="gcs_url" value=""/>
       <param name="target_system_id" value="8"/>
       <param name="target_component_id" value="1"/>
@@ -151,15 +151,15 @@
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 24.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="enu_offset_y" value="$(eval 24.0 if arg('use_sim') else 0.0)"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 
   <group if="$(arg enable_uav9)" ns="uav9">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14620@127.0.0.1:14588' if arg('use_sim') == 'true' else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="$(eval 'udp://:14620@127.0.0.1:14588' if arg('use_sim') else arg('fcu_url_real'))"/>
       <param name="gcs_url" value=""/>
       <param name="target_system_id" value="9"/>
       <param name="target_component_id" value="1"/>
@@ -167,15 +167,15 @@
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 27.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="enu_offset_y" value="$(eval 27.0 if arg('use_sim') else 0.0)"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 
   <group if="$(arg enable_uav10)" ns="uav10">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14630@127.0.0.1:14589' if arg('use_sim') == 'true' else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="$(eval 'udp://:14630@127.0.0.1:14589' if arg('use_sim') else arg('fcu_url_real'))"/>
       <param name="gcs_url" value=""/>
       <param name="target_system_id" value="10"/>
       <param name="target_component_id" value="1"/>
@@ -183,9 +183,9 @@
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 30.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="enu_offset_y" value="$(eval 30.0 if arg('use_sim') else 0.0)"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)"/>
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 </launch>

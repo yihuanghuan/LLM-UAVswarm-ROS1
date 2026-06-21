@@ -22,7 +22,7 @@
   <group ns="uav$(arg uav_id)">
     <!-- MAVROS 节点 -->
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14540@127.0.0.1:14580' if arg('use_sim') == 'true' else arg('fcu_url_real'))" />
+      <param name="fcu_url" value="$(eval 'udp://:14540@127.0.0.1:14580' if arg('use_sim') else arg('fcu_url_real'))" />
       <param name="gcs_url" value="" />
       <param name="target_system_id" value="$(arg uav_id)" />
       <param name="target_component_id" value="1" />
@@ -34,7 +34,7 @@
       <param name="enu_offset_x" value="0.0" />
       <param name="enu_offset_y" value="$(arg enu_offset_y)" />
       <param name="enu_offset_z" value="0.0" />
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') == 'true' else 0.0)" />
+      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)" />
     </node>
   </group>
 </launch>
