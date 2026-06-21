@@ -22,6 +22,7 @@
 #include <uav_swarm_interfaces/UAVSwarmCommand.h>
 #include <uav_swarm_interfaces/UAVStatus.h>
 #include <boost/bind.hpp>
+#include <XmlRpcValue.h>
 #include "ladrc_controller/ladrc_core.hpp"
 #include "ladrc_controller/minimum_jerk_trajectory.hpp"
 #include <cmath>
@@ -115,6 +116,22 @@ public:
     arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
     set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
 
+    // ====================== IAPF 邻居订阅 ======================
+    std::vector<int> neighbor_ids;
+    XmlRpc::XmlRpcValue neighbor_param;
+    if (pnh_.getParam("neighbor_uav_ids", neighbor_param) &&
+        neighbor_param.getType() == XmlRpc::XmlRpcValue::TypeArray)
+    {
+      for (int i = 0; i < neighbor_param.size(); ++i)
+      {
+        if (neighbor_param[i].getType() == XmlRpc::XmlRpcValue::TypeInt)
+        {
+          neighbor_ids.push_back(static_cast<int>(neighbor_param[i]));
+        }
+      }
+    }
+    setupNeighborSubs(neighbor_ids);
+
     // ====================== 定时器 ======================
     control_timer_ = nh_.createTimer(ros::Duration(dt_),
         &LADRCPositionControllerNode::controlLoop, this);
@@ -152,11 +169,11 @@ private:
   void neighborOdomCallback(const nav_msgs::Odometry::ConstPtr& msg, int neighbor_id)
   {
     // MAVROS odom 已是 ENU 坐标
-    // SITL 多机: 加上 Gazebo spawn 偏移 (neighbor_offset_multiplier=3.0)
+    // SITL 多机: 加上 Gazebo Y 轴 spawn 偏移 (neighbor_offset_multiplier=3.0)
     // 实机 Nokov: 无需偏移 (neighbor_offset_multiplier=0.0)
     neighbor_positions_[neighbor_id] = Eigen::Vector3d(
-        msg->pose.pose.position.x + neighbor_offset_mult_ * neighbor_id,
-        msg->pose.pose.position.y,
+        msg->pose.pose.position.x,
+        msg->pose.pose.position.y + neighbor_offset_mult_ * neighbor_id,
         msg->pose.pose.position.z);
   }
 
