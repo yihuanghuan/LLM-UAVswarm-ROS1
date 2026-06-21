@@ -100,17 +100,19 @@ roslaunch ladrc_controller swarm.launch \
 
 ## 6. 启动 LLM 调度节点
 
-LLM 调度节点运行在 `ros1_multi_uav` 容器内，但 API Key 从宿主机环境变量传入。先在宿主机设置：
+LLM 调度节点运行在 `ros1_multi_uav` 容器内。首次使用时，在项目根目录创建本地密钥文件：
+
+```bash
+cp .env.minimax.example .env.minimax
+nano .env.minimax
+```
+
+把 `.env.minimax` 中的 `MINIMAX_API_KEY` 改为真实 Key。该文件已被 `.gitignore` 忽略，不会提交。
+
+如需临时覆盖，也可以直接在当前终端设置：
 
 ```bash
 export MINIMAX_API_KEY="your-api-key"
-```
-
-如需覆盖默认 MiniMax 配置，可选设置：
-
-```bash
-export MINIMAX_BASE_URL="https://api.minimax.chat/v1"
-export MINIMAX_MODEL_NAME="MiniMax-M2.7-highspeed"
 ```
 
 启动 8 机 LLM 调度终端：

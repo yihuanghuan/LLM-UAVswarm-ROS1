@@ -121,7 +121,7 @@ Docker 环境：
 - 启动后等待启用 UAV 的 `/uavN/odom` 首帧数据，再进入自然语言输入循环。
 - 对 LLM 输出的 `uav_id` 做启用集合校验，并按 `uav_id` 修正 `uav_count`。
 - `no_location.py` 从 `MINIMAX_API_KEY`、`MINIMAX_BASE_URL`、`MINIMAX_MODEL_NAME` 读取真实 LLM API 配置，不复制项目 A 的硬编码 Key。
-- `scripts/run_llm_scheduler.sh` 将宿主机 LLM 环境变量传入 Docker 容器并启动 `location_allocate_node`。
+- `scripts/run_llm_scheduler.sh` 自动读取本地 `.env.minimax`，将 LLM 环境变量传入 Docker 容器并启动 `location_allocate_node`。
 - Dockerfile 补齐 `scipy`、`openai`、`httpx` 运行依赖。
 
 ## 8. 多无人机 namespace 设计
@@ -178,7 +178,8 @@ docker exec ros1_multi_uav bash -lc "source /opt/ros/noetic/setup.bash && source
 - LLM 调度节点已支持如下验收入口：
 
 ```bash
-export MINIMAX_API_KEY="your-api-key"
+cp .env.minimax.example .env.minimax
+nano .env.minimax
 ./scripts/run_llm_scheduler.sh 8
 ```
 
@@ -186,21 +187,21 @@ export MINIMAX_API_KEY="your-api-key"
 
 未完全确认：
 
-- 当前终端环境未设置 `MINIMAX_API_KEY`，因此未在本机完成真实外部 API 调用验收。
+- 当前本机尚未配置真实 `.env.minimax`，因此未在本机完成真实外部 API 调用验收。
 - 未验证 10 机全量仿真性能。
 - 未验证 Gazebo GUI。
 
 ## 11. 已知问题
 
 - 多机实机模式不能复用单个 `fcu_url_real` 同时连接多台无人机，需要按硬件 IP/串口拆分配置。
-- LLM 调度层需要宿主机设置 `MINIMAX_API_KEY`，并由 `scripts/run_llm_scheduler.sh` 传入容器。
+- LLM 调度层需要在项目根目录配置本地 `.env.minimax`，并由 `scripts/run_llm_scheduler.sh` 传入容器。
 - PX4/Gazebo Classic 环境中加载了 ROS2 Humble 的 Gazebo ROS 插件路径，headless spawn 可用，但 GUI 或插件冲突仍需人工确认。
 - `task_for_codex.md` 仍是本地未跟踪文件，未提交。
 
 ## 12. 后续人工检查建议
 
 1. 扩展到 10 机，检查 CPU、Gazebo 实时率和 topic 冲突。
-2. 设置 `MINIMAX_API_KEY` 后运行 `./scripts/run_llm_scheduler.sh 8` 做真实 LLM 自然语言调度端到端测试。
+2. 配置 `.env.minimax` 后运行 `./scripts/run_llm_scheduler.sh 8` 做真实 LLM 自然语言调度端到端测试。
 3. 实机多机前，按每架飞机实际 MAVLink 地址拆分 launch。
 
 ## 13. Git 提交记录

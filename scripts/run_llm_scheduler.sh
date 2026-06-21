@@ -4,6 +4,16 @@ set -e
 UAV_COUNT="${1:-8}"
 CONTAINER_NAME="${ROS1_MULTI_CONTAINER:-ros1_multi_uav}"
 DOCKER_CMD="${DOCKER_CMD:-docker}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WS_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+ENV_FILE="${MINIMAX_ENV_FILE:-$WS_DIR/.env.minimax}"
+
+if [ -f "$ENV_FILE" ]; then
+  set -a
+  # shellcheck disable=SC1090
+  source "$ENV_FILE"
+  set +a
+fi
 
 if ! [[ "$UAV_COUNT" =~ ^[0-9]+$ ]] || [ "$UAV_COUNT" -lt 1 ] || [ "$UAV_COUNT" -gt 10 ]; then
   echo "用法: $0 [UAV_COUNT]"
@@ -13,7 +23,7 @@ fi
 
 if [ -z "${MINIMAX_API_KEY:-}" ]; then
   echo "错误: MINIMAX_API_KEY 未设置"
-  echo "请先执行: export MINIMAX_API_KEY='your-api-key'"
+  echo "请先创建 $ENV_FILE，或执行: export MINIMAX_API_KEY='your-api-key'"
   exit 2
 fi
 

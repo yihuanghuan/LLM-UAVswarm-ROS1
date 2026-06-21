@@ -111,15 +111,18 @@ docker exec ros1_multi_uav bash -lc \
 
 ```bash
 cd "/home/yihuang/learning/ros1_ws（复件）"
-export MINIMAX_API_KEY="your-api-key"
+cp .env.minimax.example .env.minimax
+nano .env.minimax
 ./scripts/run_llm_scheduler.sh 8
 ```
 
-如果使用默认 MiniMax 配置，不需要设置其他变量。如需指定接口或模型，可在启动前加：
+把 `.env.minimax` 中的 `MINIMAX_API_KEY` 改为真实 Key；后续再次运行时不需要重复配置。`.env.minimax` 已被 Git 忽略，不会提交。也可以临时用 `export MINIMAX_API_KEY="your-api-key"` 覆盖。
+
+如果使用默认 MiniMax 配置，不需要修改其他变量。如需指定接口或模型，可编辑 `.env.minimax`：
 
 ```bash
-export MINIMAX_BASE_URL="https://api.minimax.chat/v1"
-export MINIMAX_MODEL_NAME="MiniMax-M2.7-highspeed"
+MINIMAX_BASE_URL=https://api.minimax.chat/v1
+MINIMAX_MODEL_NAME=MiniMax-M2.7-highspeed
 ```
 
 看到提示后输入自然语言：
@@ -428,17 +431,21 @@ rostopic echo /uav1/odom -n 1
 
 LLM 调度节点对应项目 A `Claude.md` 中的“认知层 + 调度层”：自然语言指令先由 MiniMax/OpenAI 兼容 API 解析为 JSON 蓝图，再由 ROS1 Python 调度层生成目标点、执行匈牙利分配并发布 `swarm_command`。
 
-先在宿主机设置真实 API Key：
+首次使用时，在项目根目录创建本地密钥文件：
 
 ```bash
-export MINIMAX_API_KEY="your-api-key"
+cd "/home/yihuang/learning/ros1_ws（复件）"
+cp .env.minimax.example .env.minimax
+nano .env.minimax
 ```
 
-可选覆盖默认模型配置：
+把 `.env.minimax` 中的 `MINIMAX_API_KEY` 改为真实 Key。该文件已被 `.gitignore` 忽略，不会提交。
+
+可选覆盖默认模型配置，直接写在 `.env.minimax` 中：
 
 ```bash
-export MINIMAX_BASE_URL="https://api.minimax.chat/v1"
-export MINIMAX_MODEL_NAME="MiniMax-M2.7-highspeed"
+MINIMAX_BASE_URL=https://api.minimax.chat/v1
+MINIMAX_MODEL_NAME=MiniMax-M2.7-highspeed
 ```
 
 启动 LLM 调度终端：
@@ -559,7 +566,6 @@ docker exec ros1_multi_uav bash -lc \
 
 ```bash
 cd "/home/yihuang/learning/ros1_ws（复件）"
-export MINIMAX_API_KEY="your-api-key"
 ./scripts/run_llm_scheduler.sh 8
 ```
 
