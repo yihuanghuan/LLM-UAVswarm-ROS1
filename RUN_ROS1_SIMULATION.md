@@ -136,6 +136,19 @@ docker exec ros1_multi_uav bash -lc \
   "source /opt/ros/noetic/setup.bash && source /ros1_ws/devel/setup.bash && /ros1_ws/scripts/check_multi_uav_runtime.sh 8 10"
 ```
 
+执行 8 机 `swarm_command` 指令飞行并等待稳定悬停：
+
+```bash
+docker exec ros1_multi_uav bash -lc \
+  "source /opt/ros/noetic/setup.bash && source /ros1_ws/devel/setup.bash && /ros1_ws/scripts/check_multi_uav_command_flight.sh 8 1.5 8.0 150"
+```
+
+更完整的多机仿真步骤见：
+
+```text
+docs/ROS1_GAZEBO_MULTI_UAV_SIMULATION.md
+```
+
 手动检查：
 
 ```bash

@@ -79,7 +79,9 @@ Docker 环境：
 
 - `docs/ROS1_MIGRATION_AUDIT.md`
 - `docs/ROS1_MIGRATION_PLAN.md`
+- `docs/ROS1_GAZEBO_MULTI_UAV_SIMULATION.md`
 - `scripts/build_ros1_ws.sh`
+- `scripts/check_multi_uav_command_flight.sh`
 - `scripts/check_multi_uav_topics.sh`
 - `scripts/check_multi_uav_runtime.sh`
 - `scripts/run_multi_uav_sim.sh`
@@ -164,10 +166,11 @@ docker exec ros1_multi_uav bash -lc "source /opt/ros/noetic/setup.bash && source
 - `/uav1/odom` 到 `/uav8/odom` 均有数据，Y 坐标符合 Gazebo spawn 偏移规则。
 - `/uav1/mavros/state` 到 `/uav8/mavros/state` 均为 `connected: True`、`armed: True`、`mode: "OFFBOARD"`。
 - 启动后完成一次 topic + runtime 检查，并在额外等待 60 秒后再次执行 runtime 检查，两次均通过。
+- 通过 `/uav1/swarm_command` 到 `/uav8/swarm_command` 发布 8 机目标点 `[0.0, 3.0*N, 1.5]`，8 架无人机均反馈 `is_hover_stable: True`。
+- 指令飞行后的最终采样位置接近 `x≈0`、`y≈3.0*N`、`z≈1.65-1.73`。
 
 未完全确认：
 
-- 未执行完整 `swarm_command` 轨迹跟踪飞行。
 - 未验证 10 机全量仿真性能。
 - 未验证 Gazebo GUI。
 
@@ -180,10 +183,9 @@ docker exec ros1_multi_uav bash -lc "source /opt/ros/noetic/setup.bash && source
 
 ## 12. 后续人工检查建议
 
-1. 发送 `/uav{N}/swarm_command`，观察轨迹跟踪和 `status.is_hover_stable`。
-2. 扩展到 10 机，检查 CPU、Gazebo 实时率和 topic 冲突。
-3. 设置 `MINIMAX_API_KEY` 后运行 `rosrun location_allocate location_allocate_node` 做自然语言调度端到端测试。
-4. 实机多机前，按每架飞机实际 MAVLink 地址拆分 launch。
+1. 扩展到 10 机，检查 CPU、Gazebo 实时率和 topic 冲突。
+2. 设置 `MINIMAX_API_KEY` 后运行 `rosrun location_allocate location_allocate_node` 做自然语言调度端到端测试。
+3. 实机多机前，按每架飞机实际 MAVLink 地址拆分 launch。
 
 ## 13. Git 提交记录
 
@@ -202,4 +204,6 @@ docker exec ros1_multi_uav bash -lc "source /opt/ros/noetic/setup.bash && source
 | `02a4436` | `fix: 修正多机 SITL MAVROS 端口映射` | 多机 launch、计划文档 | 2 机 topic/odom 验证通过 |
 | `d7e0d03` | `docs: 添加 ROS1 迁移报告和运行说明` | 迁移报告、运行说明 | 已推送 |
 | `994ba29` | `fix: 稳定多机 MAVROS 连接和运行时检查` | 多机 launch、控制状态机、runtime 检查脚本 | 8 机 topic/runtime 验证通过 |
-| 本提交 | `docs: 更新 8 机 Gazebo 验证结果` | 迁移报告、运行说明 | 8 机延迟 runtime 复查通过 |
+| `b2ffd6a` | `docs: 更新 8 机 Gazebo 验证结果` | 迁移报告、运行说明 | 8 机延迟 runtime 复查通过 |
+| `b9172c7` | `test: 添加 8 机指令飞行验证脚本` | 指令飞行检查脚本 | 8 机 `swarm_command` 验证通过 |
+| 本提交 | `docs: 添加 ROS1 多机 Gazebo 仿真指南` | 详细仿真说明文档、迁移报告 | 终端三层验证通过 |
