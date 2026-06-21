@@ -1,7 +1,11 @@
 # ROS1 编译生成目录
 build/
 devel/
+install/
+log/
 logs/
+.catkin_workspace
+src/CMakeLists.txt
 
 # Python 缓存
 __pycache__/
@@ -14,6 +18,13 @@ __pycache__/
 *.swp
 *.swo
 *~
+
+# ROS/Gazebo/PX4 本地数据
+*.bag
+*.db3
+.gazebo/
+.ros/
+*.ulg
 
 # 系统文件
 .DS_Store
