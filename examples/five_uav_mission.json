@@ -1,0 +1,147 @@
+{
+  "lfs_version": "2.1",
+  "mission": {
+    "nodes": [
+      {
+        "type": "task",
+        "task": {
+          "task_id": 1,
+          "U": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "F": {
+            "type": "Circle"
+          },
+          "c": {
+            "mode": "absolute",
+            "value": [
+              0,
+              9,
+              3
+            ]
+          },
+          "r": {
+            "mode": "explicit",
+            "value": 4
+          },
+          "T": {
+            "mode": "auto"
+          },
+          "m": "normal",
+          "s": 1.0,
+          "q": {
+            "mode": "hover-and-wait",
+            "duration": 1
+          }
+        }
+      },
+      {
+        "type": "parallel",
+        "completion_mode": "synchronized",
+        "tasks": [
+          {
+            "task_id": 2,
+            "U": [
+              1,
+              2,
+              3
+            ],
+            "F": {
+              "type": "Triangle"
+            },
+            "c": {
+              "mode": "absolute",
+              "value": [
+                -3,
+                6,
+                3
+              ]
+            },
+            "r": {
+              "mode": "explicit",
+              "value": 2.5
+            },
+            "T": {
+              "mode": "auto"
+            },
+            "m": "smooth",
+            "s": 1.0,
+            "q": {
+              "mode": "direct"
+            }
+          },
+          {
+            "task_id": 3,
+            "U": [
+              4,
+              5
+            ],
+            "F": {
+              "type": "Line"
+            },
+            "c": {
+              "mode": "absolute",
+              "value": [
+                3,
+                12,
+                3
+              ]
+            },
+            "r": {
+              "mode": "explicit",
+              "value": 3
+            },
+            "T": {
+              "mode": "auto"
+            },
+            "m": "aggressive",
+            "s": 1.0,
+            "q": {
+              "mode": "direct"
+            }
+          }
+        ]
+      },
+      {
+        "type": "task",
+        "task": {
+          "task_id": 4,
+          "U": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "F": {
+            "type": "Line"
+          },
+          "c": {
+            "mode": "absolute",
+            "value": [
+              0,
+              9,
+              3
+            ]
+          },
+          "r": {
+            "mode": "explicit",
+            "value": 2.5
+          },
+          "T": {
+            "mode": "auto"
+          },
+          "m": "normal",
+          "s": 1.0,
+          "q": {
+            "mode": "direct"
+          }
+        }
+      }
+    ]
+  }
+}

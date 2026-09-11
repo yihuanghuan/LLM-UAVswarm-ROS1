@@ -1,0 +1,256 @@
+==> 工作区: /home/yihuang/learning/ros1_ws
+==> Docker 镜像: ros1-paper:latest
+==> 开始 catkin_make
+Frozen controller configuration verified
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using CATKIN_DEVEL_PREFIX: /ros1_ws/devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/noetic
+-- This workspace overlays: /opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Found PY_em: /usr/lib/python3/dist-packages/em.py  
+-- Using empy: /usr/lib/python3/dist-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /ros1_ws/build/test_results
+-- Forcing gtest/gmock from source, though one was otherwise available.
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- Found Threads: TRUE  
+-- Using Python nosetests: /usr/bin/nosetests3
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 4 packages in topological order:
+-- ~~  - lfs_policy
+-- ~~  - uav_swarm_interfaces
+-- ~~  - location_allocate
+-- ~~  - ladrc_controller
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'lfs_policy'
+-- ==> add_subdirectory(lfs_policy)
+-- +++ processing catkin package: 'uav_swarm_interfaces'
+-- ==> add_subdirectory(uav_swarm_interfaces)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- uav_swarm_interfaces: 8 messages, 0 services
+-- +++ processing catkin package: 'location_allocate'
+-- ==> add_subdirectory(location_allocate)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Installing devel-space wrapper /ros1_ws/src/location_allocate/scripts/location_allocate_node to /ros1_ws/devel/lib/location_allocate
+-- Installing devel-space wrapper /ros1_ws/src/location_allocate/scripts/candidate_dispatch to /ros1_ws/devel/lib/location_allocate
+-- +++ processing catkin package: 'ladrc_controller'
+-- ==> add_subdirectory(ladrc_controller)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Installing devel-space wrapper /ros1_ws/src/ladrc_controller/scripts/configure_mavros_stream.py to /ros1_ws/devel/lib/ladrc_controller
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /ros1_ws/build
+Scanning dependencies of target _uav_swarm_interfaces_generate_messages_check_deps_IAPFDebug
+Scanning dependencies of target _uav_swarm_interfaces_generate_messages_check_deps_UAVStatus
+Scanning dependencies of target std_msgs_generate_messages_py
+Scanning dependencies of target _uav_swarm_interfaces_generate_messages_check_deps_ControlTrackingDebug
+Scanning dependencies of target _uav_swarm_interfaces_generate_messages_check_deps_TrajectoryMetrics
+Scanning dependencies of target _uav_swarm_interfaces_generate_messages_check_deps_StartupEvent
+Scanning dependencies of target _uav_swarm_interfaces_generate_messages_check_deps_ControlAdaptationLog
+Scanning dependencies of target _uav_swarm_interfaces_generate_messages_check_deps_ExecutionProfile
+Scanning dependencies of target std_msgs_generate_messages_lisp
+Scanning dependencies of target std_msgs_generate_messages_cpp
+Scanning dependencies of target _uav_swarm_interfaces_generate_messages_check_deps_UAVExecutionCommand
+Scanning dependencies of target geometry_msgs_generate_messages_lisp
+Scanning dependencies of target geometry_msgs_generate_messages_py
+Scanning dependencies of target geometry_msgs_generate_messages_cpp
+Scanning dependencies of target std_msgs_generate_messages_eus
+Scanning dependencies of target geometry_msgs_generate_messages_nodejs
+Scanning dependencies of target geometry_msgs_generate_messages_eus
+Scanning dependencies of target sensor_msgs_generate_messages_py
+Scanning dependencies of target std_msgs_generate_messages_nodejs
+Scanning dependencies of target nav_msgs_generate_messages_eus
+Scanning dependencies of target nav_msgs_generate_messages_lisp
+Scanning dependencies of target nav_msgs_generate_messages_cpp
+Scanning dependencies of target nav_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target nav_msgs_generate_messages_eus
+[  0%] Built target nav_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target nav_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_nodejs
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_lisp
+Scanning dependencies of target actionlib_msgs_generate_messages_cpp
+Scanning dependencies of target actionlib_msgs_generate_messages_py
+Scanning dependencies of target nav_msgs_generate_messages_py
+Scanning dependencies of target actionlib_msgs_generate_messages_eus
+Scanning dependencies of target actionlib_msgs_generate_messages_lisp
+Scanning dependencies of target actionlib_msgs_generate_messages_nodejs
+Scanning dependencies of target geographic_msgs_generate_messages_py
+Scanning dependencies of target geographic_msgs_generate_messages_nodejs
+Scanning dependencies of target sensor_msgs_generate_messages_cpp
+Scanning dependencies of target uuid_msgs_generate_messages_py
+Scanning dependencies of target geographic_msgs_generate_messages_eus
+Scanning dependencies of target mavros_msgs_generate_messages_py
+Scanning dependencies of target sensor_msgs_generate_messages_nodejs
+Scanning dependencies of target roscpp_generate_messages_cpp
+Scanning dependencies of target mavros_msgs_generate_messages_nodejs
+Scanning dependencies of target ladrc_lib
+[  0%] Built target actionlib_msgs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_eus
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+[  0%] Built target geographic_msgs_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target uuid_msgs_generate_messages_py
+[  0%] Built target geographic_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target _uav_swarm_interfaces_generate_messages_check_deps_TrajectoryMetrics
+[  0%] Built target geographic_msgs_generate_messages_eus
+[  0%] Built target _uav_swarm_interfaces_generate_messages_check_deps_StartupEvent
+[  0%] Built target mavros_msgs_generate_messages_py
+[  0%] Built target _uav_swarm_interfaces_generate_messages_check_deps_ExecutionProfile
+[  0%] Built target _uav_swarm_interfaces_generate_messages_check_deps_UAVStatus
+[  0%] Built target _uav_swarm_interfaces_generate_messages_check_deps_ControlAdaptationLog
+[  0%] Built target _uav_swarm_interfaces_generate_messages_check_deps_IAPFDebug
+[  0%] Built target _uav_swarm_interfaces_generate_messages_check_deps_ControlTrackingDebug
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[  0%] Built target mavros_msgs_generate_messages_nodejs
+[  0%] Built target roscpp_generate_messages_cpp
+[  0%] Built target _uav_swarm_interfaces_generate_messages_check_deps_UAVExecutionCommand
+[  2%] Building CXX object ladrc_controller/CMakeFiles/ladrc_lib.dir/src/ladrc_core.cpp.o
+[  4%] Building CXX object ladrc_controller/CMakeFiles/ladrc_lib.dir/src/leso.cpp.o
+Scanning dependencies of target uuid_msgs_generate_messages_eus
+Scanning dependencies of target sensor_msgs_generate_messages_lisp
+Scanning dependencies of target roscpp_generate_messages_eus
+Scanning dependencies of target sensor_msgs_generate_messages_eus
+Scanning dependencies of target geographic_msgs_generate_messages_cpp
+Scanning dependencies of target roscpp_generate_messages_py
+Scanning dependencies of target rosgraph_msgs_generate_messages_nodejs
+[  6%] Building CXX object ladrc_controller/CMakeFiles/ladrc_lib.dir/src/lsef.cpp.o
+Scanning dependencies of target rosgraph_msgs_generate_messages_cpp
+Scanning dependencies of target roscpp_generate_messages_nodejs
+Scanning dependencies of target geographic_msgs_generate_messages_lisp
+[  8%] Building CXX object ladrc_controller/CMakeFiles/ladrc_lib.dir/src/iapf_core.cpp.o
+Scanning dependencies of target uuid_msgs_generate_messages_cpp
+Scanning dependencies of target uuid_msgs_generate_messages_lisp
+Scanning dependencies of target mavros_msgs_generate_messages_eus
+Scanning dependencies of target rosgraph_msgs_generate_messages_eus
+Scanning dependencies of target mavros_msgs_generate_messages_lisp
+Scanning dependencies of target uuid_msgs_generate_messages_nodejs
+Scanning dependencies of target rosgraph_msgs_generate_messages_lisp
+Scanning dependencies of target roscpp_generate_messages_lisp
+Scanning dependencies of target rosgraph_msgs_generate_messages_py
+Scanning dependencies of target mavros_msgs_generate_messages_cpp
+[  8%] Built target sensor_msgs_generate_messages_lisp
+[  8%] Built target sensor_msgs_generate_messages_eus
+[  8%] Built target roscpp_generate_messages_eus
+[  8%] Built target uuid_msgs_generate_messages_eus
+[  8%] Built target roscpp_generate_messages_py
+[  8%] Built target rosgraph_msgs_generate_messages_nodejs
+[  8%] Built target roscpp_generate_messages_nodejs
+[  8%] Built target rosgraph_msgs_generate_messages_cpp
+[  8%] Built target geographic_msgs_generate_messages_cpp
+[  8%] Built target uuid_msgs_generate_messages_cpp
+[  8%] Built target uuid_msgs_generate_messages_lisp
+[  8%] Built target geographic_msgs_generate_messages_lisp
+[  8%] Built target rosgraph_msgs_generate_messages_eus
+[  8%] Built target mavros_msgs_generate_messages_eus
+[  8%] Built target uuid_msgs_generate_messages_nodejs
+[  8%] Built target mavros_msgs_generate_messages_lisp
+[  8%] Built target rosgraph_msgs_generate_messages_lisp
+[  8%] Built target roscpp_generate_messages_lisp
+[  8%] Built target rosgraph_msgs_generate_messages_py
+[  8%] Built target mavros_msgs_generate_messages_cpp
+Scanning dependencies of target uav_swarm_interfaces_generate_messages_py
+Scanning dependencies of target uav_swarm_interfaces_generate_messages_lisp
+Scanning dependencies of target uav_swarm_interfaces_generate_messages_nodejs
+Scanning dependencies of target uav_swarm_interfaces_generate_messages_eus
+Scanning dependencies of target uav_swarm_interfaces_generate_messages_cpp
+[ 14%] Generating Python from MSG uav_swarm_interfaces/UAVStatus
+[ 14%] Generating Python from MSG uav_swarm_interfaces/ControlTrackingDebug
+[ 14%] Generating Python from MSG uav_swarm_interfaces/ControlAdaptationLog
+[ 16%] Generating Lisp code from uav_swarm_interfaces/UAVStatus.msg
+[ 26%] Generating Python from MSG uav_swarm_interfaces/StartupEvent
+[ 26%] Generating Lisp code from uav_swarm_interfaces/ControlTrackingDebug.msg
+[ 26%] Generating Python from MSG uav_swarm_interfaces/IAPFDebug
+[ 26%] Generating Python from MSG uav_swarm_interfaces/ExecutionProfile
+[ 28%] Generating Lisp code from uav_swarm_interfaces/ControlAdaptationLog.msg
+[ 30%] Generating EusLisp code from uav_swarm_interfaces/UAVStatus.msg
+[ 34%] Generating Javascript code from uav_swarm_interfaces/ControlAdaptationLog.msg
+[ 34%] Generating Python from MSG uav_swarm_interfaces/TrajectoryMetrics
+[ 34%] Generating Lisp code from uav_swarm_interfaces/ExecutionProfile.msg
+[ 42%] Generating Lisp code from uav_swarm_interfaces/IAPFDebug.msg
+[ 42%] Generating Python from MSG uav_swarm_interfaces/UAVExecutionCommand
+[ 42%] Generating Javascript code from uav_swarm_interfaces/UAVStatus.msg
+[ 42%] Generating Javascript code from uav_swarm_interfaces/ExecutionProfile.msg
+[ 44%] Generating EusLisp code from uav_swarm_interfaces/ControlAdaptationLog.msg
+[ 46%] Generating Lisp code from uav_swarm_interfaces/StartupEvent.msg
+[ 48%] Generating C++ code from uav_swarm_interfaces/UAVStatus.msg
+[ 51%] Generating Javascript code from uav_swarm_interfaces/ControlTrackingDebug.msg
+[ 55%] Generating Javascript code from uav_swarm_interfaces/IAPFDebug.msg
+[ 55%] Generating Lisp code from uav_swarm_interfaces/TrajectoryMetrics.msg
+[ 59%] Generating EusLisp code from uav_swarm_interfaces/ControlTrackingDebug.msg
+[ 59%] Generating C++ code from uav_swarm_interfaces/ControlAdaptationLog.msg
+[ 61%] Generating Lisp code from uav_swarm_interfaces/UAVExecutionCommand.msg
+[ 65%] Generating C++ code from uav_swarm_interfaces/ControlTrackingDebug.msg
+[ 65%] Generating Javascript code from uav_swarm_interfaces/StartupEvent.msg
+[ 67%] Generating C++ code from uav_swarm_interfaces/ExecutionProfile.msg
+[ 69%] Generating Javascript code from uav_swarm_interfaces/TrajectoryMetrics.msg
+[ 71%] Generating EusLisp code from uav_swarm_interfaces/ExecutionProfile.msg
+[ 73%] Generating C++ code from uav_swarm_interfaces/IAPFDebug.msg
+[ 75%] Generating EusLisp code from uav_swarm_interfaces/IAPFDebug.msg
+[ 77%] Generating EusLisp code from uav_swarm_interfaces/StartupEvent.msg
+[ 79%] Generating C++ code from uav_swarm_interfaces/StartupEvent.msg
+[ 79%] Built target uav_swarm_interfaces_generate_messages_lisp
+[ 81%] Generating EusLisp code from uav_swarm_interfaces/TrajectoryMetrics.msg
+[ 83%] Generating EusLisp code from uav_swarm_interfaces/UAVExecutionCommand.msg
+[ 85%] Generating Javascript code from uav_swarm_interfaces/UAVExecutionCommand.msg
+[ 87%] Generating C++ code from uav_swarm_interfaces/TrajectoryMetrics.msg
+[ 89%] Generating C++ code from uav_swarm_interfaces/UAVExecutionCommand.msg
+[ 91%] Generating EusLisp manifest code for uav_swarm_interfaces
+[ 91%] Built target uav_swarm_interfaces_generate_messages_nodejs
+[ 93%] Generating Python msg __init__.py for uav_swarm_interfaces
+[ 93%] Built target uav_swarm_interfaces_generate_messages_cpp
+[ 93%] Built target uav_swarm_interfaces_generate_messages_py
+[ 93%] Built target uav_swarm_interfaces_generate_messages_eus
+Scanning dependencies of target uav_swarm_interfaces_generate_messages
+[ 93%] Built target uav_swarm_interfaces_generate_messages
+[ 95%] Linking CXX shared library /ros1_ws/devel/lib/libladrc_lib.so
+[ 95%] Built target ladrc_lib
+Scanning dependencies of target ladrc_position_controller_node
+[ 97%] Building CXX object ladrc_controller/CMakeFiles/ladrc_position_controller_node.dir/src/ladrc_position_controller_node.cpp.o
+[100%] Linking CXX executable /ros1_ws/devel/lib/ladrc_controller/ladrc_position_controller_node
+[100%] Built target ladrc_position_controller_node
+Base path: /ros1_ws
+Source space: /ros1_ws/src
+Build space: /ros1_ws/build
+Devel space: /ros1_ws/devel
+Install space: /ros1_ws/install
+####
+#### Running command: "cmake /ros1_ws/src -DCATKIN_DEVEL_PREFIX=/ros1_ws/devel -DCMAKE_INSTALL_PREFIX=/ros1_ws/install -G Unix Makefiles" in "/ros1_ws/build"
+####
+####
+#### Running command: "make -j24 -l24" in "/ros1_ws/build"
+####
+==> 编译完成

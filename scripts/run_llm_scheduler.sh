@@ -21,7 +21,7 @@ if ! [[ "$UAV_COUNT" =~ ^[0-9]+$ ]] || [ "$UAV_COUNT" -lt 1 ] || [ "$UAV_COUNT" 
   exit 2
 fi
 
-if [ -z "${MINIMAX_API_KEY:-}" ]; then
+if [ -z "${LLM_API_KEY:-${MINIMAX_API_KEY:-}}" ]; then
   echo "错误: MINIMAX_API_KEY 未设置"
   echo "请先创建 $ENV_FILE，或执行: export MINIMAX_API_KEY='your-api-key'"
   exit 2
@@ -38,12 +38,12 @@ if [ -t 0 ] && [ -t 1 ]; then
   tty_args=(-it)
 fi
 
-env_args=(-e "MINIMAX_API_KEY=${MINIMAX_API_KEY}")
-if [ -n "${MINIMAX_BASE_URL:-}" ]; then
-  env_args+=(-e "MINIMAX_BASE_URL=${MINIMAX_BASE_URL}")
+env_args=(-e "LLM_API_KEY=${LLM_API_KEY:-${MINIMAX_API_KEY:-}}")
+if [ -n "${LLM_BASE_URL:-}" ]; then
+  env_args+=(-e "LLM_BASE_URL=${LLM_BASE_URL}")
 fi
-if [ -n "${MINIMAX_MODEL_NAME:-}" ]; then
-  env_args+=(-e "MINIMAX_MODEL_NAME=${MINIMAX_MODEL_NAME}")
+if [ -n "${LLM_MODEL_NAME:-}" ]; then
+  env_args+=(-e "LLM_MODEL_NAME=${LLM_MODEL_NAME}")
 fi
 
 echo "==> 启动 ROS1 LLM 调度层"
@@ -54,5 +54,5 @@ echo "==> 退出调度终端请输入: q"
 $DOCKER_CMD exec "${tty_args[@]}" "${env_args[@]}" "$CONTAINER_NAME" bash -lc "
   source /opt/ros/noetic/setup.bash
   source /ros1_ws/devel/setup.bash
-  rosrun location_allocate location_allocate_node _uav_count:=$UAV_COUNT
+  rosrun location_allocate location_allocate_node _uav_ids:=[$(seq -s, 1 "$UAV_COUNT")] _lfs_runtime_mode:=candidate_v2
 "

@@ -2,6 +2,7 @@
 #define LADRC_CONTROLLER__MINIMUM_JERK_TRAJECTORY_HPP_
 
 #include <cmath>
+#include <stdexcept>
 
 namespace ladrc_controller
 {
@@ -35,9 +36,14 @@ public:
 
   void initialize(double start_pos, double end_pos, double duration)
   {
+    if (!std::isfinite(duration) || duration <= 0.0)
+    {
+      throw std::invalid_argument(
+              "MinimumJerk duration must be finite and positive");
+    }
     p0_ = start_pos;
     pT_ = end_pos;
-    T_ = std::max(duration, 1e-3);  // 防止除零
+    T_ = duration;
 
     double dp = pT_ - p0_;
     double T2 = T_ * T_;

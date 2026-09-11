@@ -1,0 +1,308 @@
+Scanning dependencies of target gtest
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target nav_msgs_generate_messages_lisp
+[  1%] Building CXX object gtest/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+[  1%] Built target nav_msgs_generate_messages_cpp
+[  1%] Built target nav_msgs_generate_messages_nodejs
+[  1%] Built target actionlib_msgs_generate_messages_cpp
+[  1%] Built target actionlib_msgs_generate_messages_nodejs
+[  1%] Built target geographic_msgs_generate_messages_py
+[  1%] Built target actionlib_msgs_generate_messages_eus
+[  1%] Built target actionlib_msgs_generate_messages_lisp
+[  1%] Built target uuid_msgs_generate_messages_py
+[  1%] Built target _uav_swarm_interfaces_generate_messages_check_deps_UAVStatus
+[  1%] Built target actionlib_msgs_generate_messages_py
+[  1%] Built target mavros_msgs_generate_messages_py
+[  1%] Built target sensor_msgs_generate_messages_cpp
+[  1%] Built target geographic_msgs_generate_messages_nodejs
+[  1%] Built target _uav_swarm_interfaces_generate_messages_check_deps_StartupEvent
+[  1%] Built target nav_msgs_generate_messages_py
+[  1%] Built target mavros_msgs_generate_messages_nodejs
+[  1%] Built target sensor_msgs_generate_messages_nodejs
+[  1%] Built target _uav_swarm_interfaces_generate_messages_check_deps_ControlAdaptationLog
+[  1%] Built target geographic_msgs_generate_messages_eus
+[  1%] Built target _uav_swarm_interfaces_generate_messages_check_deps_UAVExecutionCommand
+[  1%] Built target _uav_swarm_interfaces_generate_messages_check_deps_ExecutionProfile
+[  1%] Built target _uav_swarm_interfaces_generate_messages_check_deps_IAPFDebug
+[  1%] Built target _uav_swarm_interfaces_generate_messages_check_deps_ControlTrackingDebug
+[  1%] Built target _uav_swarm_interfaces_generate_messages_check_deps_TrajectoryMetrics
+[  1%] Built target roscpp_generate_messages_cpp
+[  1%] Built target sensor_msgs_generate_messages_lisp
+[  1%] Built target sensor_msgs_generate_messages_eus
+[  1%] Built target uuid_msgs_generate_messages_eus
+[  1%] Built target rosgraph_msgs_generate_messages_nodejs
+[  1%] Built target geographic_msgs_generate_messages_cpp
+[  1%] Built target uuid_msgs_generate_messages_cpp
+[  1%] Built target roscpp_generate_messages_py
+[  1%] Built target roscpp_generate_messages_eus
+[  1%] Built target rosgraph_msgs_generate_messages_cpp
+[  1%] Built target rosgraph_msgs_generate_messages_eus
+[  1%] Built target roscpp_generate_messages_nodejs
+[  1%] Built target mavros_msgs_generate_messages_eus
+[  1%] Built target mavros_msgs_generate_messages_lisp
+[  1%] Built target geographic_msgs_generate_messages_lisp
+[  1%] Built target uuid_msgs_generate_messages_nodejs
+[  1%] Built target rosgraph_msgs_generate_messages_lisp
+[  1%] Built target roscpp_generate_messages_lisp
+[  1%] Built target mavros_msgs_generate_messages_cpp
+[  1%] Built target rosgraph_msgs_generate_messages_py
+[ 16%] Built target uav_swarm_interfaces_generate_messages_cpp
+[ 25%] Built target uav_swarm_interfaces_generate_messages_lisp
+[ 25%] Built target uuid_msgs_generate_messages_lisp
+[ 32%] Built target ladrc_lib
+[ 46%] Built target uav_swarm_interfaces_generate_messages_eus
+[ 71%] Built target uav_swarm_interfaces_generate_messages_nodejs
+[ 71%] Built target uav_swarm_interfaces_generate_messages_py
+[ 73%] Linking CXX shared library ../lib/libgtest.so
+[ 73%] Built target gtest
+Scanning dependencies of target gtest_main
+[ 74%] Building CXX object gtest/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+[ 76%] Linking CXX shared library ../lib/libgtest_main.so
+[ 76%] Built target gtest_main
+Scanning dependencies of target test_startup_state_machine
+Scanning dependencies of target test_minimum_jerk_trajectory
+Scanning dependencies of target test_execution_profile_guard
+Scanning dependencies of target test_hover_stability
+Scanning dependencies of target test_swarm_state_builder
+[ 79%] Building CXX object ladrc_controller/CMakeFiles/test_minimum_jerk_trajectory.dir/test/test_minimum_jerk_trajectory.cpp.o
+[ 79%] Building CXX object ladrc_controller/CMakeFiles/test_hover_stability.dir/test/test_hover_stability.cpp.o
+[ 80%] Building CXX object ladrc_controller/CMakeFiles/test_execution_profile_guard.dir/test/test_execution_profile_guard.cpp.o
+[ 82%] Building CXX object ladrc_controller/CMakeFiles/test_swarm_state_builder.dir/test/test_swarm_state_builder.cpp.o
+[ 83%] Building CXX object ladrc_controller/CMakeFiles/test_startup_state_machine.dir/test/test_startup_state_machine.cpp.o
+Scanning dependencies of target test_control_setpoint
+Scanning dependencies of target test_iapf_core
+Scanning dependencies of target test_position_velocity_filter
+[ 86%] Building CXX object ladrc_controller/CMakeFiles/test_control_setpoint.dir/test/test_control_setpoint.cpp.o
+[ 86%] Building CXX object ladrc_controller/CMakeFiles/test_iapf_core.dir/test/test_iapf_core.cpp.o
+[ 88%] Building CXX object ladrc_controller/CMakeFiles/test_position_velocity_filter.dir/test/test_position_velocity_filter.cpp.o
+[ 89%] Linking CXX executable /ros1_ws/devel/lib/ladrc_controller/test_hover_stability
+[ 91%] Linking CXX executable /ros1_ws/devel/lib/ladrc_controller/test_minimum_jerk_trajectory
+[ 92%] Linking CXX executable /ros1_ws/devel/lib/ladrc_controller/test_startup_state_machine
+[ 94%] Linking CXX executable /ros1_ws/devel/lib/ladrc_controller/test_execution_profile_guard
+[ 94%] Built target test_hover_stability
+Scanning dependencies of target run_tests_ladrc_controller_gtest_test_hover_stability
+[ 94%] Built target test_minimum_jerk_trajectory
+Running main() from /usr/src/googletest/googletest/src/gtest_main.cc
+[==========] Running 4 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 4 tests from HoverStability
+[ RUN      ] HoverStability.AcceptanceBoundaryEntersAndConfirms
+[       OK ] HoverStability.AcceptanceBoundaryEntersAndConfirms (0 ms)
+[ RUN      ] HoverStability.HysteresisBandCannotEnterFromUnstable
+[       OK ] HoverStability.HysteresisBandCannotEnterFromUnstable (0 ms)
+[ RUN      ] HoverStability.ConfirmedStateExitsAndCanReenter
+[       OK ] HoverStability.ConfirmedStateExitsAndCanReenter (0 ms)
+[ RUN      ] HoverStability.ResetClearsCandidateAndConfirmedState
+[       OK ] HoverStability.ResetClearsCandidateAndConfirmedState (0 ms)
+[----------] 4 tests from HoverStability (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 4 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 4 tests.
+-- run_tests.py: execute commands
+  /ros1_ws/devel/lib/ladrc_controller/test_hover_stability --gtest_output=xml:/ros1_ws/build/test_results/ladrc_controller/gtest-test_hover_stability.xml
+-- run_tests.py: verify result "/ros1_ws/build/test_results/ladrc_controller/gtest-test_hover_stability.xml"
+[ 94%] Built target test_startup_state_machine
+Scanning dependencies of target run_tests_ladrc_controller_gtest_test_minimum_jerk_trajectory
+[ 94%] Built target run_tests_ladrc_controller_gtest_test_hover_stability
+Scanning dependencies of target run_tests_ladrc_controller_gtest_test_startup_state_machine
+Running main() from /usr/src/googletest/googletest/src/gtest_main.cc
+[==========] Running 2 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 2 tests from MinimumJerkTrajectory
+[ RUN      ] MinimumJerkTrajectory.RejectsInvalidDuration
+[       OK ] MinimumJerkTrajectory.RejectsInvalidDuration (0 ms)
+[ RUN      ] MinimumJerkTrajectory.SatisfiesEndpointBoundaryConditions
+[       OK ] MinimumJerkTrajectory.SatisfiesEndpointBoundaryConditions (0 ms)
+[----------] 2 tests from MinimumJerkTrajectory (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 2 tests.
+-- run_tests.py: execute commands
+  /ros1_ws/devel/lib/ladrc_controller/test_minimum_jerk_trajectory --gtest_output=xml:/ros1_ws/build/test_results/ladrc_controller/gtest-test_minimum_jerk_trajectory.xml
+-- run_tests.py: verify result "/ros1_ws/build/test_results/ladrc_controller/gtest-test_minimum_jerk_trajectory.xml"
+[ 94%] Built target test_execution_profile_guard
+Running main() from /usr/src/googletest/googletest/src/gtest_main.cc
+[==========] Running 6 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 6 tests from StartupStateMachine
+[ RUN      ] StartupStateMachine.RequiresContinuousEstimatorSettleAndPrestream
+[       OK ] StartupStateMachine.RequiresContinuousEstimatorSettleAndPrestream (0 ms)
+[ RUN      ] StartupStateMachine.ConfirmsFeedbackThenTakeoffHold
+[       OK ] StartupStateMachine.ConfirmsFeedbackThenTakeoffHold (0 ms)
+[ RUN      ] StartupStateMachine.LatchesRuntimeFaultWithoutRecoveryActions
+[       OK ] StartupStateMachine.LatchesRuntimeFaultWithoutRecoveryActions (0 ms)
+[ RUN      ] StartupStateMachine.LatchesArmLossWhileWaitingForOffboard
+[       OK ] StartupStateMachine.LatchesArmLossWhileWaitingForOffboard (0 ms)
+[ RUN      ] StartupStateMachine.StopsAfterFiniteArmRetries
+[       OK ] StartupStateMachine.StopsAfterFiniteArmRetries (0 ms)
+[ RUN      ] StartupStateMachine.EnforcesTotalTimeout
+[       OK ] StartupStateMachine.EnforcesTotalTimeout (0 ms)
+[----------] 6 tests from StartupStateMachine (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 6 tests from 1 test suite ran. (1 ms total)
+[  PASSED  ] 6 tests.
+-- run_tests.py: execute commands
+  /ros1_ws/devel/lib/ladrc_controller/test_startup_state_machine --gtest_output=xml:/ros1_ws/build/test_results/ladrc_controller/gtest-test_startup_state_machine.xml
+-- run_tests.py: verify result "/ros1_ws/build/test_results/ladrc_controller/gtest-test_startup_state_machine.xml"
+[ 94%] Built target run_tests_ladrc_controller_gtest_test_minimum_jerk_trajectory
+Scanning dependencies of target run_tests_ladrc_controller_gtest_test_execution_profile_guard
+[ 94%] Built target run_tests_ladrc_controller_gtest_test_startup_state_machine
+Running main() from /usr/src/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from ExecutionProfileGuard
+[ RUN      ] ExecutionProfileGuard.RejectsNonFiniteProfile
+[       OK ] ExecutionProfileGuard.RejectsNonFiniteProfile (0 ms)
+[ RUN      ] ExecutionProfileGuard.ClampsToInjectedHardLimits
+[       OK ] ExecutionProfileGuard.ClampsToInjectedHardLimits (0 ms)
+[ RUN      ] ExecutionProfileGuard.RejectsNonFiniteProvenanceGain
+[       OK ] ExecutionProfileGuard.RejectsNonFiniteProvenanceGain (0 ms)
+[ RUN      ] ExecutionProfileGuard.RejectsBrokenHysteresisAfterClamp
+[       OK ] ExecutionProfileGuard.RejectsBrokenHysteresisAfterClamp (0 ms)
+[ RUN      ] ExecutionProfileGuard.AcceptsZeroAndRejectsNegativeRepulsionScale
+[       OK ] ExecutionProfileGuard.AcceptsZeroAndRejectsNegativeRepulsionScale (0 ms)
+[ RUN      ] ExecutionProfileGuard.RejectsEnterDistanceAtHardThreshold
+[       OK ] ExecutionProfileGuard.RejectsEnterDistanceAtHardThreshold (0 ms)
+[ RUN      ] ExecutionProfileGuard.SmoothApplyUsesConfiguredAlpha
+[       OK ] ExecutionProfileGuard.SmoothApplyUsesConfiguredAlpha (0 ms)
+[----------] 7 tests from ExecutionProfileGuard (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 7 tests.
+-- run_tests.py: execute commands
+  /ros1_ws/devel/lib/ladrc_controller/test_execution_profile_guard --gtest_output=xml:/ros1_ws/build/test_results/ladrc_controller/gtest-test_execution_profile_guard.xml
+-- run_tests.py: verify result "/ros1_ws/build/test_results/ladrc_controller/gtest-test_execution_profile_guard.xml"
+[ 94%] Built target run_tests_ladrc_controller_gtest_test_execution_profile_guard
+[ 95%] Linking CXX executable /ros1_ws/devel/lib/ladrc_controller/test_swarm_state_builder
+[ 95%] Built target test_swarm_state_builder
+Scanning dependencies of target run_tests_ladrc_controller_gtest_test_swarm_state_builder
+Running main() from /usr/src/googletest/googletest/src/gtest_main.cc
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from SwarmStateBuilder
+[ RUN      ] SwarmStateBuilder.ConvertsPx4NedToGlobalEnu
+[       OK ] SwarmStateBuilder.ConvertsPx4NedToGlobalEnu (0 ms)
+[----------] 1 test from SwarmStateBuilder (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+-- run_tests.py: execute commands
+  /ros1_ws/devel/lib/ladrc_controller/test_swarm_state_builder --gtest_output=xml:/ros1_ws/build/test_results/ladrc_controller/gtest-test_swarm_state_builder.xml
+-- run_tests.py: verify result "/ros1_ws/build/test_results/ladrc_controller/gtest-test_swarm_state_builder.xml"
+[ 95%] Built target run_tests_ladrc_controller_gtest_test_swarm_state_builder
+[ 97%] Linking CXX executable /ros1_ws/devel/lib/ladrc_controller/test_control_setpoint
+[ 97%] Built target test_control_setpoint
+Scanning dependencies of target run_tests_ladrc_controller_gtest_test_control_setpoint
+Running main() from /usr/src/googletest/googletest/src/gtest_main.cc
+[==========] Running 5 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 5 tests from ControlSetpoint
+[ RUN      ] ControlSetpoint.ParsesSupportedModesAndRejectsUnknown
+[       OK ] ControlSetpoint.ParsesSupportedModesAndRejectsUnknown (0 ms)
+[ RUN      ] ControlSetpoint.SelectsCorrectOffboardLevel
+[       OK ] ControlSetpoint.SelectsCorrectOffboardLevel (0 ms)
+[ RUN      ] ControlSetpoint.LadrcModePublishesOnlyConvertedAcceleration
+[       OK ] ControlSetpoint.LadrcModePublishesOnlyConvertedAcceleration (0 ms)
+[ RUN      ] ControlSetpoint.PositionBaselineKeepsPositionAndOptionalFeedforward
+[       OK ] ControlSetpoint.PositionBaselineKeepsPositionAndOptionalFeedforward (0 ms)
+[ RUN      ] ControlSetpoint.LadrcUsesSafeAccelerationOnceAndSaturatesOutput
+[       OK ] ControlSetpoint.LadrcUsesSafeAccelerationOnceAndSaturatesOutput (0 ms)
+[----------] 5 tests from ControlSetpoint (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 5 tests.
+-- run_tests.py: execute commands
+  /ros1_ws/devel/lib/ladrc_controller/test_control_setpoint --gtest_output=xml:/ros1_ws/build/test_results/ladrc_controller/gtest-test_control_setpoint.xml
+-- run_tests.py: verify result "/ros1_ws/build/test_results/ladrc_controller/gtest-test_control_setpoint.xml"
+[ 98%] Built target run_tests_ladrc_controller_gtest_test_control_setpoint
+[ 98%] Linking CXX executable /ros1_ws/devel/lib/ladrc_controller/test_position_velocity_filter
+[ 98%] Built target test_position_velocity_filter
+Scanning dependencies of target run_tests_ladrc_controller_gtest_test_position_velocity_filter
+Running main() from /usr/src/googletest/googletest/src/gtest_main.cc
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from PositionVelocityFilter
+[ RUN      ] PositionVelocityFilter.RejectsRawVelocityBiasWhenPositionIsStationary
+[       OK ] PositionVelocityFilter.RejectsRawVelocityBiasWhenPositionIsStationary (0 ms)
+[ RUN      ] PositionVelocityFilter.TracksPositionMotion
+[       OK ] PositionVelocityFilter.TracksPositionMotion (0 ms)
+[ RUN      ] PositionVelocityFilter.ResetsAcrossEstimatorFrameReset
+[       OK ] PositionVelocityFilter.ResetsAcrossEstimatorFrameReset (0 ms)
+[----------] 3 tests from PositionVelocityFilter (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test suite ran. (1 ms total)
+[  PASSED  ] 3 tests.
+-- run_tests.py: execute commands
+  /ros1_ws/devel/lib/ladrc_controller/test_position_velocity_filter --gtest_output=xml:/ros1_ws/build/test_results/ladrc_controller/gtest-test_position_velocity_filter.xml
+-- run_tests.py: verify result "/ros1_ws/build/test_results/ladrc_controller/gtest-test_position_velocity_filter.xml"
+[ 98%] Built target run_tests_ladrc_controller_gtest_test_position_velocity_filter
+[100%] Linking CXX executable /ros1_ws/devel/lib/ladrc_controller/test_iapf_core
+[100%] Built target test_iapf_core
+Scanning dependencies of target run_tests_ladrc_controller_gtest_test_iapf_core
+Running main() from /usr/src/googletest/googletest/src/gtest_main.cc
+[==========] Running 10 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 10 tests from IAPFCore
+[ RUN      ] IAPFCore.ParsesOnlySupportedModes
+[       OK ] IAPFCore.ParsesOnlySupportedModes (0 ms)
+[ RUN      ] IAPFCore.ClassicHasNoEscapeOrAcceleration
+[       OK ] IAPFCore.ClassicHasNoEscapeOrAcceleration (1 ms)
+[ RUN      ] IAPFCore.IdOrderEscapeIsPairwiseOpposite
+[       OK ] IAPFCore.IdOrderEscapeIsPairwiseOpposite (0 ms)
+[ RUN      ] IAPFCore.CoincidentNeighborsRemainFiniteAndSaturate
+[       OK ] IAPFCore.CoincidentNeighborsRemainFiniteAndSaturate (0 ms)
+[ RUN      ] IAPFCore.StaleNeighborsDoNotRepel
+[       OK ] IAPFCore.StaleNeighborsDoNotRepel (0 ms)
+[ RUN      ] IAPFCore.RejectsUnsafeParameterRanges
+[       OK ] IAPFCore.RejectsUnsafeParameterRanges (0 ms)
+[ RUN      ] IAPFCore.HysteresisAndClosingSpeedGateActivation
+[       OK ] IAPFCore.HysteresisAndClosingSpeedGateActivation (0 ms)
+[ RUN      ] IAPFCore.RecedingRepulsionFadesBetweenViolationAndExit
+[       OK ] IAPFCore.RecedingRepulsionFadesBetweenViolationAndExit (0 ms)
+[ RUN      ] IAPFCore.RepulsionStrengthComesOnlyFromCompiledGain
+[       OK ] IAPFCore.RepulsionStrengthComesOnlyFromCompiledGain (0 ms)
+[ RUN      ] IAPFCore.LowPassFilterSmoothsAndValidatesAlpha
+[       OK ] IAPFCore.LowPassFilterSmoothsAndValidatesAlpha (0 ms)
+[----------] 10 tests from IAPFCore (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 10 tests from 1 test suite ran. (1 ms total)
+[  PASSED  ] 10 tests.
+-- run_tests.py: execute commands
+  /ros1_ws/devel/lib/ladrc_controller/test_iapf_core --gtest_output=xml:/ros1_ws/build/test_results/ladrc_controller/gtest-test_iapf_core.xml
+-- run_tests.py: verify result "/ros1_ws/build/test_results/ladrc_controller/gtest-test_iapf_core.xml"
+[100%] Built target run_tests_ladrc_controller_gtest_test_iapf_core
+Scanning dependencies of target run_tests_ladrc_controller_gtest
+[100%] Built target run_tests_ladrc_controller_gtest
+Scanning dependencies of target run_tests_ladrc_controller
+[100%] Built target run_tests_ladrc_controller
+Base path: /ros1_ws
+Source space: /ros1_ws/src
+Build space: /ros1_ws/build
+Devel space: /ros1_ws/devel
+Install space: /ros1_ws/install
+####
+#### Running command: "make cmake_check_build_system" in "/ros1_ws/build"
+####
+####
+#### Running command: "make run_tests_ladrc_controller -j24 -l24" in "/ros1_ws/build"
+####
+Summary: 76 tests, 0 errors, 0 failures, 0 skipped

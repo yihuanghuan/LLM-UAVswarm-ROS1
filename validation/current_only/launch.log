@@ -1,0 +1,13 @@
+==> 前提：宿主机已启动 PX4 多机 SITL
+    示例: cd ~/PX4-Autopilot && Tools/simulation/gazebo-classic/sitl_multiple_run.sh -n 5
+==> 工作区: /home/yihuang/learning/ros1_ws
+==> Docker 镜像: ros1-paper:latest
+==> 容器名: ros1_current_sim
+7aa3e039b8117b498e6e62b98fd5a7b771ad31deee5710f96cf266ce20fb7e8f
+==> 多机 ROS1 容器已启动
+查看日志: docker logs -f ros1_current_sim
+进入容器: docker exec -it ros1_current_sim bash
+检查 topic:
+  source /opt/ros/noetic/setup.bash
+  source /ros1_ws/devel/setup.bash
+  /ros1_ws/scripts/check_multi_uav_topics.sh 5

@@ -1,35 +1,84 @@
-# ROS1 LADRC 仿真参数。
-# 该文件由 <rosparam> 加载到 ladrc_position_controller 私有命名空间，
-# 因此必须保持扁平键值结构，不能使用 ROS2 的 /**/ros__parameters 包装。
-
-# Control frequency (Hz)
+# Generated from sealed paper baseline; no algorithm parameter tuning.
 control_frequency: 50.0
-
-# X-axis LADRC parameters
-# omega_o: observer bandwidth (3-5x omega_c for proper disturbance estimation)
-# omega_c: controller bandwidth (settling time ≈ 4/omega_c)
-# b0: control gain estimate (1.0 = nominal 1:1 mapping)
-omega_o_x: 10.0
-omega_c_x: 3.0
+control_mode: ladrc_acceleration
 b0_x: 1.0
-
-# Y-axis LADRC parameters
-omega_o_y: 10.0
-omega_c_y: 3.0
 b0_y: 1.0
-
-# Z-axis LADRC parameters (higher bandwidth for vertical dynamics)
-omega_o_z: 15.0
-omega_c_z: 3.5
 b0_z: 1.0
-
-# Limits
 max_velocity: 5.0
 max_acceleration_x: 5.0
 max_acceleration_y: 5.0
 max_acceleration_z: 8.0
-
-# IAPF 避障参数
-iapf_safe_distance: 1.5
+hover_position_enter_tolerance: 0.4
+hover_velocity_enter_tolerance: 0.3
+hover_position_exit_tolerance: 0.5
+hover_velocity_exit_tolerance: 0.4
+hover_stable_hold_time: 1.0
+hover_velocity_filter_tau: 0.5
+startup_settle_time: 10.0
+startup_speed_tolerance: 0.15
+startup_odom_timeout: 0.5
+startup_status_timeout: 2.0
+startup_prestream_time: 1.5
+startup_command_retry_interval: 1.0
+startup_takeoff_altitude: 1.5
+startup_takeoff_position_tolerance: 0.25
+startup_takeoff_hold_time: 0.5
+startup_runtime_fault_debounce: 0.5
+startup_total_timeout: 60.0
+startup_max_request_attempts: 20
+avoidance_mode: iapf_dual
+iapf_violation_distance: 1.5
+iapf_enter_distance: 1.7
+iapf_exit_distance: 1.8
+iapf_filter_alpha: 0.2
 iapf_repulsion_gain: 25.0
-neighbor_uav_ids: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+iapf_escape_mode: id_order
+iapf_escape_gain: 0.05
+iapf_distance_epsilon: 0.1
+iapf_position_gain: 0.05
+iapf_position_limit: 0.5
+iapf_accel_gain: 0.3
+iapf_accel_limit: 2.0
+neighbor_timeout: 0.2
+neighbor_uav_ids:
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 7
+- 8
+- 9
+- 10
+enable_execution_profiles: true
+omega_c_x: 1.5
+omega_c_y: 1.5
+omega_c_z: 1.75
+omega_o_x: 5.0
+omega_o_y: 5.0
+omega_o_z: 7.5
+execution_profile_smoothing_alpha: 1.0
+execution_profile_omega_c_min:
+- 1.125
+- 1.125
+- 1.3125
+execution_profile_omega_c_max:
+- 1.875
+- 1.875
+- 2.1875
+execution_profile_omega_o_min:
+- 3.75
+- 3.75
+- 5.625
+execution_profile_omega_o_max:
+- 6.25
+- 6.25
+- 9.375
+execution_profile_velocity_max: 5.0
+execution_profile_acceleration_max: 5.0
+execution_profile_jerk_max: 10.0
+execution_profile_iapf_enter_min: 1.6
+execution_profile_iapf_enter_max: 1.7000000000000002
+execution_profile_iapf_exit_max: 1.9
+execution_profile_iapf_repulsion_max: 1.25

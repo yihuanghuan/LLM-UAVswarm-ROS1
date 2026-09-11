@@ -1,0 +1,13 @@
+float32 duration
+string style
+float32[3] omega_c
+float32[3] omega_o
+float32 velocity_limit
+float32 acceleration_limit
+float32 jerk_limit
+float32 iapf_enter_distance
+float32 iapf_exit_distance
+float32 iapf_repulsion_scale
+float32 style_gain
+float32 task_gain
+string configuration_id

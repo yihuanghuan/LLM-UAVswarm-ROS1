@@ -1,0 +1,22 @@
+[
+  {
+    "user": "Have UAVs 1 through 5 form a circle. Be more cautious.",
+    "availability": "Available UAV IDs: [1, 2, 3, 4, 5]\nTotal available UAVs: 5",
+    "output": {"lfs_version":"2.1","mission":{"nodes":[{"type":"task","task":{"task_id":1,"U":[1,2,3,4,5],"F":{"type":"Circle"},"c":{"mode":"auto"},"r":{"mode":"auto"},"T":{"mode":"auto"},"m":"normal","s":1.0,"q":{"mode":"direct"}}}]}}
+  },
+  {
+    "user": "In parallel, UAVs 1 to 3 form a triangle centered at [2,3,4] with circumradius 2 m in 5 seconds, while UAVs 4 to 7 form a compact square around their current centroid. Both groups must finish together.",
+    "availability": "Available UAV IDs: [1, 2, 3, 4, 5, 6, 7]\nTotal available UAVs: 7",
+    "output": {"lfs_version":"2.1","mission":{"nodes":[{"type":"parallel","completion_mode":"synchronized","tasks":[{"task_id":1,"U":[1,2,3],"F":{"type":"Triangle"},"c":{"mode":"absolute","value":[2,3,4]},"r":{"mode":"explicit","value":2},"T":{"mode":"explicit","value":5},"m":"normal","s":1.0,"q":{"mode":"direct"}},{"task_id":2,"U":[4,5,6,7],"F":{"type":"Polygon","sides":4},"c":{"mode":"maintain_current_centroid"},"r":{"mode":"qualitative","value":"compact"},"T":{"mode":"auto"},"m":"normal","s":1.0,"q":{"mode":"direct"}}]}]}}
+  },
+  {
+    "user": "First form a circle. After it stabilizes, hold for 2 seconds, then form a line two meters above the current centroid.",
+    "availability": "Available UAV IDs: [1, 2, 3, 4]\nTotal available UAVs: 4",
+    "output": {"lfs_version":"2.1","mission":{"nodes":[{"type":"task","task":{"task_id":1,"U":[1,2,3,4],"F":{"type":"Circle"},"c":{"mode":"auto"},"r":{"mode":"auto"},"T":{"mode":"auto"},"m":"normal","s":1.0,"q":{"mode":"hover-and-wait","duration":2} }},{"type":"task","task":{"task_id":2,"U":[1,2,3,4],"F":{"type":"Line"},"c":{"mode":"relative","reference":"current_swarm_centroid","offset":[0,0,2],"frame":"world"},"r":{"mode":"auto"},"T":{"mode":"auto"},"m":"normal","s":1.0,"q":{"mode":"direct"}}}]}}
+  },
+  {
+    "user": "Form a line and, as soon as its trajectory completes, proceed to a circle.",
+    "availability": "Available UAV IDs: [1, 2, 3, 4]\nTotal available UAVs: 4",
+    "output": {"lfs_version":"2.1","mission":{"nodes":[{"type":"task","task":{"task_id":1,"U":[1,2,3,4],"F":{"type":"Line"},"c":{"mode":"auto"},"r":{"mode":"auto"},"T":{"mode":"auto"},"m":"normal","s":1.0,"q":{"mode":"continuous"}}},{"type":"task","task":{"task_id":2,"U":[1,2,3,4],"F":{"type":"Circle"},"c":{"mode":"auto"},"r":{"mode":"auto"},"T":{"mode":"auto"},"m":"normal","s":1.0,"q":{"mode":"direct"}}}]}}
+  }
+]

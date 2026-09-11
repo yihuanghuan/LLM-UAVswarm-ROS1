@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/paper_candidate_schema_v2.json",
+  "title": "Paper Candidate Mission Schema v2",
+  "type": "object",
+  "required": ["lfs_version", "mission"],
+  "properties": {
+    "lfs_version": {"const": "2.1"},
+    "mission": {"$ref": "#/$defs/mission"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "vector3": {"type":"array","items":{"type":"number"},"minItems":3,"maxItems":3},
+    "uav_ids": {"type":"array","items":{"type":"integer","minimum":1},"minItems":1,"uniqueItems":true},
+    "formation": {"oneOf":[
+      {"type":"object","required":["type"],"properties":{"type":{"const":"Circle"}},"additionalProperties":false},
+      {"type":"object","required":["type"],"properties":{"type":{"const":"Line"}},"additionalProperties":false},
+      {"type":"object","required":["type"],"properties":{"type":{"const":"Sphere"}},"additionalProperties":false},
+      {"type":"object","required":["type"],"properties":{"type":{"const":"Triangle"}},"additionalProperties":false},
+      {"type":"object","required":["type","sides"],"properties":{"type":{"const":"Polygon"},"sides":{"type":"integer","minimum":4}},"additionalProperties":false}
+    ]},
+    "center": {"oneOf":[
+      {"type":"object","required":["mode","value"],"properties":{"mode":{"const":"absolute"},"value":{"$ref":"#/$defs/vector3"}},"additionalProperties":false},
+      {"type":"object","required":["mode","reference","offset","frame"],"properties":{"mode":{"const":"relative"},"reference":{"const":"current_swarm_centroid"},"offset":{"$ref":"#/$defs/vector3"},"frame":{"const":"world"}},"additionalProperties":false},
+      {"type":"object","required":["mode"],"properties":{"mode":{"const":"maintain_current_centroid"}},"additionalProperties":false},
+      {"type":"object","required":["mode"],"properties":{"mode":{"const":"auto"}},"additionalProperties":false}
+    ]},
+    "radius": {"oneOf":[
+      {"type":"object","required":["mode","value"],"properties":{"mode":{"const":"explicit"},"value":{"type":"number","exclusiveMinimum":0}},"additionalProperties":false},
+      {"type":"object","required":["mode","value"],"properties":{"mode":{"const":"qualitative"},"value":{"enum":["compact","normal","spacious"]}},"additionalProperties":false},
+      {"type":"object","required":["mode"],"properties":{"mode":{"const":"auto"}},"additionalProperties":false}
+    ]},
+    "time": {"oneOf":[
+      {"type":"object","required":["mode","value"],"properties":{"mode":{"const":"explicit"},"value":{"type":"number","exclusiveMinimum":0}},"additionalProperties":false},
+      {"type":"object","required":["mode"],"properties":{"mode":{"const":"auto"}},"additionalProperties":false}
+    ]},
+    "transition": {"oneOf":[
+      {"type":"object","required":["mode"],"properties":{"mode":{"const":"direct"}},"additionalProperties":false},
+      {"type":"object","required":["mode"],"properties":{"mode":{"const":"continuous"}},"additionalProperties":false},
+      {"type":"object","required":["mode","duration"],"properties":{"mode":{"const":"hover-and-wait"},"duration":{"type":"number","minimum":0}},"additionalProperties":false}
+    ]},
+    "task": {
+      "type":"object",
+      "required":["task_id","U","F","c","r","T","m","s","q"],
+      "properties":{
+        "task_id":{"type":"integer","minimum":1},
+        "U":{"$ref":"#/$defs/uav_ids"},
+        "F":{"$ref":"#/$defs/formation"},
+        "c":{"$ref":"#/$defs/center"},
+        "r":{"$ref":"#/$defs/radius"},
+        "T":{"$ref":"#/$defs/time"},
+        "m":{"enum":["smooth","normal","aggressive"]},
+        "s":{"type":"number","minimum":1},
+        "q":{"$ref":"#/$defs/transition"}
+      },
+      "additionalProperties":false
+    },
+    "node": {"oneOf":[
+      {"type":"object","required":["type","task"],"properties":{"type":{"const":"task"},"task":{"$ref":"#/$defs/task"}},"additionalProperties":false},
+      {"type":"object","required":["type","completion_mode","tasks"],"properties":{"type":{"const":"parallel"},"completion_mode":{"enum":["independent","synchronized"]},"tasks":{"type":"array","items":{"$ref":"#/$defs/task"},"minItems":2}},"additionalProperties":false}
+    ]},
+    "mission":{"type":"object","required":["nodes"],"properties":{"nodes":{"type":"array","items":{"$ref":"#/$defs/node"},"minItems":1}},"additionalProperties":false}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "validated_at_utc": "2026-09-11T02:39:52.312733+00:00",
+  "source_baseline": "6cf402debf23851b1eff3edc6f3ab49eae7127c4",
+  "px4_commit": "30e763b6780061d70a14894e3e8b06e6a656f9b8",
+  "gazebo_version": "11.10.2",
+  "image": "ros1-paper:latest",
+  "clock": "shared host wall time",
+  "simulated_fleet_sizes": [
+    3,
+    5
+  ],
+  "headless": true
+}

@@ -35,3 +35,6 @@ __pycache__/
 # 系统文件
 .DS_Store
 Thumbs.db
+
+# Original user workspace snapshot (may contain local credentials)
+migration_backups/

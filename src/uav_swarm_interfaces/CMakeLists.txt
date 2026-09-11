@@ -9,8 +9,15 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
   FILES
-  UAVSwarmCommand.msg
   UAVStatus.msg
+  ControlAdaptationLog.msg
+  ControlTrackingDebug.msg
+  ExecutionProfile.msg
+  IAPFDebug.msg
+  StartupEvent.msg
+  TrajectoryMetrics.msg
+  UAVExecutionCommand.msg
+
 )
 
 generate_messages(

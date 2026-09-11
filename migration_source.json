@@ -1,0 +1,31 @@
+{
+  "baseline": "paper-final-sim-v3",
+  "source_commit": "6cf402debf23851b1eff3edc6f3ab49eae7127c4",
+  "configuration_id": "paper-current-v11-c0-f-frozen",
+  "policy_sha256": "6b47d27f4253d7311e79ea51f6dd1cf0d0182e6df24374a94abae0aa6a135858",
+  "source_tree_verified_against_sealed_commit": true,
+  "byte_identical_cpp_algorithm_files": {
+    "include/ladrc_controller/leso.hpp": "7a871a5acf678e63cb0d928b2392cdbb2b98182261b367b52dd935013830d9c8",
+    "include/ladrc_controller/execution_profile_guard.hpp": "e294f1c297d5076ea18e4cc913f80292fd49d17878d3b6375dd69e85c0b0c4de",
+    "include/ladrc_controller/iapf_core.hpp": "fdd49d3e3468ab43f75fbcdf91c87831626893aaf6df3f1cb6e67232382a7f4d",
+    "include/ladrc_controller/minimum_jerk_trajectory.hpp": "5f8f155bc456875e416abd19c6b469c9111b4841dfa0469cc19af1317e3f0ae0",
+    "include/ladrc_controller/ladrc_core.hpp": "e27901b8e82cc83018b222b21831fcc49682240cdfefdf0b30b374c60be8f990",
+    "include/ladrc_controller/hover_stability.hpp": "18e4e75022125b3b73716b0ca8facb4db960529c6cf0caf94342ad52836c1333",
+    "include/ladrc_controller/startup_state_machine.hpp": "cb49d806ec952a2149bf275e152ebe0976af52676ce5cf9332444f0c2bf9c6d5",
+    "include/ladrc_controller/lsef.hpp": "d93303d66fdaf0b42d866d662f6a6ce20778d1a50fbec61752d98d2fa1ccf7a2",
+    "include/ladrc_controller/position_velocity_filter.hpp": "4909b9046d099b6a1b1318f0159ebb4648c50b8866653129cae0613bdcc9d115",
+    "src/lsef.cpp": "47a14c6388df90d0fd2e2e9ab46ca2db3ac405c7b8b5e707a05f0448c56c8e4f",
+    "src/iapf_core.cpp": "eabbf8e77d7854cda548f665c0f0c4319c88d4c2af512fa448cd0ecfd628bea2",
+    "src/ladrc_core.cpp": "15f0c434e5478b5233668eca17f0a78e005d7f2a04b087f7169e162dfd7fc9e4",
+    "src/leso.cpp": "33aa48b96b28dfc9fccd8e2da2f7d06044000a33e6f51a95691cafb56d1835c5"
+  },
+  "current_only_cleanup": {
+    "legacy_runtime_removed": true,
+    "legacy_command_message_removed": true,
+    "legacy_trajectory_safety_telemetry_removed": true,
+    "current_message_count": 8,
+    "python_tests": 161,
+    "cpp_tests": 76,
+    "validation_report": "docs/VALIDATION.md"
+  }
+}

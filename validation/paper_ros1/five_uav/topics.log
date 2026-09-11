@@ -1,0 +1,57 @@
+==> 检查 5 架无人机的 ROS topic
+==> 确保已 source /opt/ros/noetic/setup.bash 和 devel/setup.bash
+
+---- UAV1 ----
+[OK] /uav1/mavros/state
+[OK] /uav1/mavros/local_position/odom
+[OK] /uav1/mavros/setpoint_raw/local
+[OK] /uav1/execution_command
+[OK] /uav1/status
+[OK] /uav1/swarm_state
+
+---- UAV2 ----
+[OK] /uav2/mavros/state
+[OK] /uav2/mavros/local_position/odom
+[OK] /uav2/mavros/setpoint_raw/local
+[OK] /uav2/execution_command
+[OK] /uav2/status
+[OK] /uav2/swarm_state
+
+---- UAV3 ----
+[OK] /uav3/mavros/state
+[OK] /uav3/mavros/local_position/odom
+[OK] /uav3/mavros/setpoint_raw/local
+[OK] /uav3/execution_command
+[OK] /uav3/status
+[OK] /uav3/swarm_state
+
+---- UAV4 ----
+[OK] /uav4/mavros/state
+[OK] /uav4/mavros/local_position/odom
+[OK] /uav4/mavros/setpoint_raw/local
+[OK] /uav4/execution_command
+[OK] /uav4/status
+[OK] /uav4/swarm_state
+
+---- UAV5 ----
+[OK] /uav5/mavros/state
+[OK] /uav5/mavros/local_position/odom
+[OK] /uav5/mavros/setpoint_raw/local
+[OK] /uav5/execution_command
+[OK] /uav5/status
+[OK] /uav5/swarm_state
+
+==> MAVROS 节点:
+/uav1/mavros
+/uav2/mavros
+/uav3/mavros
+/uav4/mavros
+/uav5/mavros
+
+==> 控制节点:
+/uav1/ladrc_position_controller
+/uav2/ladrc_position_controller
+/uav3/ladrc_position_controller
+/uav4/ladrc_position_controller
+/uav5/ladrc_position_controller
+==> 检查通过

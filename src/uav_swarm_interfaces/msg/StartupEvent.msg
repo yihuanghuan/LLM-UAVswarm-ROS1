@@ -1,0 +1,13 @@
+std_msgs/Header header
+uint8 uav_id
+uint32 mission_id
+string event
+uint8 startup_state
+bool system_ready
+bool armed
+bool offboard
+bool failsafe
+bool pre_flight_checks_pass
+float32 altitude
+float32 position_derived_speed
+bool has_pending_command

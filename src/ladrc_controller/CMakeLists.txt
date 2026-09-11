@@ -38,6 +38,7 @@ add_library(ladrc_lib
   src/ladrc_core.cpp
   src/leso.cpp
   src/lsef.cpp
+  src/iapf_core.cpp
 )
 
 target_link_libraries(ladrc_lib
@@ -75,6 +76,20 @@ install(DIRECTORY launch/
 
 # ---- Python 脚本 ----
 catkin_install_python(PROGRAMS
-  scripts/vrpn_vision_relay.py
+  scripts/configure_mavros_stream.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+add_dependencies(ladrc_position_controller_node ${catkin_EXPORTED_TARGETS})
+
+if(CATKIN_ENABLE_TESTING)
+  file(GLOB PAPER_TESTS test/test_*.cpp)
+  foreach(source ${PAPER_TESTS})
+    get_filename_component(test_name ${source} NAME_WE)
+    catkin_add_gtest(${test_name} ${source})
+    if(TARGET ${test_name})
+      target_link_libraries(${test_name} gtest_main ladrc_lib ${catkin_LIBRARIES})
+      add_dependencies(${test_name} ${catkin_EXPORTED_TARGETS})
+    endif()
+  endforeach()
+endif()

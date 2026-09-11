@@ -1,0 +1,25 @@
+[
+  {
+    "command_id": "de5d3ffdb786",
+    "command_type": "paper_candidate",
+    "raw_command": "Have UAVs 1 through 5 form a circle centered at [0,9,3] with radius 4 meters, automatic duration, normal motion, and safety factor 1.0.",
+    "prompt_tokens": "1799",
+    "completion_tokens": "582",
+    "latency_ms": "6944",
+    "format_compliant": "False",
+    "valid_json": "True",
+    "schema_valid": "True",
+    "field_accuracy": "1.0",
+    "retry_count": "0",
+    "error_type": "",
+    "error_reason": "",
+    "prompt_version": "paper-candidate-en-v2",
+    "prompt_hash": "0327c1364145df3b5c990eef3328ee176b12bf496f4a81f7232ce99fb8e4dd91",
+    "schema_version": "paper-candidate-schema-v2",
+    "schema_hash": "be6063a533f05b8d0b6e87353a40fb294975261fa1514cd5d34ced19ce2bffe7",
+    "model_name": "MiniMax-M2.7-highspeed",
+    "temperature": "0.0",
+    "top_p": "0.01",
+    "runtime_mode": "paper_candidate"
+  }
+]

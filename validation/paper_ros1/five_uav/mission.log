@@ -1,0 +1,3 @@
+[INFO] [1789093715.016391]: Paper Candidate runtime enabled with policy paper-current-v11-c0-f-frozen
+shutdown request: user request
+{"candidate_completed": false, "failure": "TimeoutError: Candidate hover completion timed out: [1, 2, 3, 4, 5]"}

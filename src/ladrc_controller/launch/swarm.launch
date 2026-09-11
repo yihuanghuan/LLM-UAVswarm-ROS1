@@ -1,23 +1,8 @@
-<!--
-  多机集群启动文件 (ROS1 + MAVROS)
-
-  SITL 仿真:
-    roslaunch ladrc_controller swarm.launch
-    roslaunch ladrc_controller swarm.launch enable_uav4:=false enable_uav5:=false
-
-  PX4 SITL 多机端口:
-    sitl_multiple_run.sh -n N 启动 N 个实例，分别监听端口 14580, 14581, ..., 14580+N-1
-    注意: sitl_multiple_run.sh 从 instance 1 开始 (非 0)
-
-  实机:
-    当前 launch 保留 use_sim:=false 入口，但多机实机需要逐机配置不同 fcu_url。
-    不要用单个 fcu_url_real 同时连接多台真实无人机。
--->
+<!-- PX4 instance N -> UAV N, MAV_SYS_ID=N+1, global ENU spawn Y=3N. -->
 <launch>
-  <arg name="use_sim" default="true" doc="true=SITL仿真, false=实机"/>
-  <arg name="fcu_url_real" default="/dev/ttyACM0:921600" doc="单机实机 MAVLink 地址；多机实机请拆分逐机配置"/>
-  <arg name="ladrc_config" default="$(find ladrc_controller)/config/ladrc_params.yaml" doc="LADRC 参数文件"/>
-
+  <arg name="ladrc_config" default="$(find ladrc_controller)/config/ladrc_params.yaml"/>
+  <arg name="control_mode" default="ladrc_acceleration"/>
+  <arg name="neighbor_uav_ids" default="[1,2,3,4,5,6,7,8,9,10]"/>
   <arg name="enable_uav1" default="true"/>
   <arg name="enable_uav2" default="true"/>
   <arg name="enable_uav3" default="true"/>
@@ -28,164 +13,174 @@
   <arg name="enable_uav8" default="true"/>
   <arg name="enable_uav9" default="true"/>
   <arg name="enable_uav10" default="true"/>
-
   <group if="$(arg enable_uav1)" ns="uav1">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14541@127.0.0.1:14581' if arg('use_sim') else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="udp://:14541@127.0.0.1:14581"/>
       <param name="gcs_url" value=""/>
-      <param name="target_system_id" value="$(eval 2 if arg('use_sim') else 1)"/>
+      <param name="target_system_id" value="2"/>
       <param name="target_component_id" value="1"/>
     </node>
+    <node name="configure_mavros_stream" pkg="ladrc_controller" type="configure_mavros_stream.py" output="screen"/>
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
+      <param name="control_mode" value="$(arg control_mode)"/>
+      <rosparam param="neighbor_uav_ids" subst_value="true">$(arg neighbor_uav_ids)</rosparam>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
+      <param name="enu_offset_y" value="3.0"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
-
   <group if="$(arg enable_uav2)" ns="uav2">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14542@127.0.0.1:14582' if arg('use_sim') else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="udp://:14542@127.0.0.1:14582"/>
       <param name="gcs_url" value=""/>
-      <param name="target_system_id" value="$(eval 3 if arg('use_sim') else 2)"/>
+      <param name="target_system_id" value="3"/>
       <param name="target_component_id" value="1"/>
     </node>
+    <node name="configure_mavros_stream" pkg="ladrc_controller" type="configure_mavros_stream.py" output="screen"/>
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
+      <param name="control_mode" value="$(arg control_mode)"/>
+      <rosparam param="neighbor_uav_ids" subst_value="true">$(arg neighbor_uav_ids)</rosparam>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 6.0 if arg('use_sim') else 0.0)"/>
+      <param name="enu_offset_y" value="6.0"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
-
   <group if="$(arg enable_uav3)" ns="uav3">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14543@127.0.0.1:14583' if arg('use_sim') else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="udp://:14543@127.0.0.1:14583"/>
       <param name="gcs_url" value=""/>
-      <param name="target_system_id" value="$(eval 4 if arg('use_sim') else 3)"/>
+      <param name="target_system_id" value="4"/>
       <param name="target_component_id" value="1"/>
     </node>
+    <node name="configure_mavros_stream" pkg="ladrc_controller" type="configure_mavros_stream.py" output="screen"/>
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
+      <param name="control_mode" value="$(arg control_mode)"/>
+      <rosparam param="neighbor_uav_ids" subst_value="true">$(arg neighbor_uav_ids)</rosparam>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 9.0 if arg('use_sim') else 0.0)"/>
+      <param name="enu_offset_y" value="9.0"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
-
   <group if="$(arg enable_uav4)" ns="uav4">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14544@127.0.0.1:14584' if arg('use_sim') else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="udp://:14544@127.0.0.1:14584"/>
       <param name="gcs_url" value=""/>
-      <param name="target_system_id" value="$(eval 5 if arg('use_sim') else 4)"/>
+      <param name="target_system_id" value="5"/>
       <param name="target_component_id" value="1"/>
     </node>
+    <node name="configure_mavros_stream" pkg="ladrc_controller" type="configure_mavros_stream.py" output="screen"/>
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
+      <param name="control_mode" value="$(arg control_mode)"/>
+      <rosparam param="neighbor_uav_ids" subst_value="true">$(arg neighbor_uav_ids)</rosparam>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 12.0 if arg('use_sim') else 0.0)"/>
+      <param name="enu_offset_y" value="12.0"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
-
   <group if="$(arg enable_uav5)" ns="uav5">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14545@127.0.0.1:14585' if arg('use_sim') else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="udp://:14545@127.0.0.1:14585"/>
       <param name="gcs_url" value=""/>
-      <param name="target_system_id" value="$(eval 6 if arg('use_sim') else 5)"/>
+      <param name="target_system_id" value="6"/>
       <param name="target_component_id" value="1"/>
     </node>
+    <node name="configure_mavros_stream" pkg="ladrc_controller" type="configure_mavros_stream.py" output="screen"/>
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
+      <param name="control_mode" value="$(arg control_mode)"/>
+      <rosparam param="neighbor_uav_ids" subst_value="true">$(arg neighbor_uav_ids)</rosparam>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 15.0 if arg('use_sim') else 0.0)"/>
+      <param name="enu_offset_y" value="15.0"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
-
   <group if="$(arg enable_uav6)" ns="uav6">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14546@127.0.0.1:14586' if arg('use_sim') else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="udp://:14546@127.0.0.1:14586"/>
       <param name="gcs_url" value=""/>
-      <param name="target_system_id" value="$(eval 7 if arg('use_sim') else 6)"/>
+      <param name="target_system_id" value="7"/>
       <param name="target_component_id" value="1"/>
     </node>
+    <node name="configure_mavros_stream" pkg="ladrc_controller" type="configure_mavros_stream.py" output="screen"/>
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
+      <param name="control_mode" value="$(arg control_mode)"/>
+      <rosparam param="neighbor_uav_ids" subst_value="true">$(arg neighbor_uav_ids)</rosparam>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 18.0 if arg('use_sim') else 0.0)"/>
+      <param name="enu_offset_y" value="18.0"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
-
   <group if="$(arg enable_uav7)" ns="uav7">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14547@127.0.0.1:14587' if arg('use_sim') else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="udp://:14547@127.0.0.1:14587"/>
       <param name="gcs_url" value=""/>
-      <param name="target_system_id" value="$(eval 8 if arg('use_sim') else 7)"/>
+      <param name="target_system_id" value="8"/>
       <param name="target_component_id" value="1"/>
     </node>
+    <node name="configure_mavros_stream" pkg="ladrc_controller" type="configure_mavros_stream.py" output="screen"/>
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
+      <param name="control_mode" value="$(arg control_mode)"/>
+      <rosparam param="neighbor_uav_ids" subst_value="true">$(arg neighbor_uav_ids)</rosparam>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 21.0 if arg('use_sim') else 0.0)"/>
+      <param name="enu_offset_y" value="21.0"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
-
   <group if="$(arg enable_uav8)" ns="uav8">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14548@127.0.0.1:14588' if arg('use_sim') else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="udp://:14548@127.0.0.1:14588"/>
       <param name="gcs_url" value=""/>
-      <param name="target_system_id" value="$(eval 9 if arg('use_sim') else 8)"/>
+      <param name="target_system_id" value="9"/>
       <param name="target_component_id" value="1"/>
     </node>
+    <node name="configure_mavros_stream" pkg="ladrc_controller" type="configure_mavros_stream.py" output="screen"/>
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
+      <param name="control_mode" value="$(arg control_mode)"/>
+      <rosparam param="neighbor_uav_ids" subst_value="true">$(arg neighbor_uav_ids)</rosparam>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 24.0 if arg('use_sim') else 0.0)"/>
+      <param name="enu_offset_y" value="24.0"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
-
   <group if="$(arg enable_uav9)" ns="uav9">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14549@127.0.0.1:14589' if arg('use_sim') else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="udp://:14549@127.0.0.1:14589"/>
       <param name="gcs_url" value=""/>
-      <param name="target_system_id" value="$(eval 10 if arg('use_sim') else 9)"/>
+      <param name="target_system_id" value="10"/>
       <param name="target_component_id" value="1"/>
     </node>
+    <node name="configure_mavros_stream" pkg="ladrc_controller" type="configure_mavros_stream.py" output="screen"/>
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
+      <param name="control_mode" value="$(arg control_mode)"/>
+      <rosparam param="neighbor_uav_ids" subst_value="true">$(arg neighbor_uav_ids)</rosparam>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 27.0 if arg('use_sim') else 0.0)"/>
+      <param name="enu_offset_y" value="27.0"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
-
   <group if="$(arg enable_uav10)" ns="uav10">
     <node name="mavros" pkg="mavros" type="mavros_node" output="screen">
-      <param name="fcu_url" value="$(eval 'udp://:14550@127.0.0.1:14590' if arg('use_sim') else arg('fcu_url_real'))"/>
+      <param name="fcu_url" value="udp://:14550@127.0.0.1:14590"/>
       <param name="gcs_url" value=""/>
-      <param name="target_system_id" value="$(eval 11 if arg('use_sim') else 10)"/>
+      <param name="target_system_id" value="11"/>
       <param name="target_component_id" value="1"/>
     </node>
+    <node name="configure_mavros_stream" pkg="ladrc_controller" type="configure_mavros_stream.py" output="screen"/>
     <node name="ladrc_position_controller" pkg="ladrc_controller" type="ladrc_position_controller_node" output="screen">
       <rosparam file="$(arg ladrc_config)" command="load"/>
+      <param name="control_mode" value="$(arg control_mode)"/>
+      <rosparam param="neighbor_uav_ids" subst_value="true">$(arg neighbor_uav_ids)</rosparam>
       <param name="enu_offset_x" value="0.0"/>
-      <param name="enu_offset_y" value="$(eval 30.0 if arg('use_sim') else 0.0)"/>
+      <param name="enu_offset_y" value="30.0"/>
       <param name="enu_offset_z" value="0.0"/>
-      <param name="neighbor_offset_multiplier" value="$(eval 3.0 if arg('use_sim') else 0.0)"/>
     </node>
   </group>
 </launch>

@@ -1,5 +1,6 @@
 #include "ladrc_controller/ladrc_core.hpp"
 #include <algorithm>
+#include <cmath>
 
 namespace ladrc_controller
 {
@@ -95,6 +96,16 @@ void LADRCController::setControllerBandwidth(double omega_c)
   params_.kd = 2.0 * omega_c;
   if (controller_) {
     controller_->setGains(params_.kp, params_.kd);
+  }
+}
+
+void LADRCController::setOutputLimits(double min_output, double max_output)
+{
+  if (std::isfinite(min_output) && std::isfinite(max_output) &&
+      min_output < max_output)
+  {
+    params_.min_output = min_output;
+    params_.max_output = max_output;
   }
 }
 

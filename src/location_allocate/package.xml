@@ -17,4 +17,8 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>uav_swarm_interfaces</exec_depend>
+  <depend>nav_msgs</depend>
+  <exec_depend>lfs_policy</exec_depend>
+  <exec_depend>python3-rospkg</exec_depend>
+  <exec_depend>python3-jsonschema</exec_depend>
 </package>

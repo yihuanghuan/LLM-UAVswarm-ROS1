@@ -1,0 +1,1 @@
+<package format="2"><name>lfs_policy</name><version>0.1.0</version><description>Frozen paper policy</description><maintainer email="yihuang@example.com">yihuang</maintainer><license>Apache-2.0</license><buildtool_depend>catkin</buildtool_depend><exec_depend>python3-yaml</exec_depend></package>

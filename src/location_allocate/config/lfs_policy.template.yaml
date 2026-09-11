@@ -1,0 +1,88 @@
+# Candidate LFS policy structure. Every null is provisional/TBD and must be
+# explicitly resolved before the new runtime path is enabled. This file is not
+# a ROS parameter file; production requires a complete validated policy.
+policy_status: template
+configuration_id: null
+
+state_snapshot:
+  state_timeout: null
+  snapshot_skew: null
+  fresh_state_wait_timeout: null
+  allow_receive_time_fallback: null
+  require_velocity: null
+
+geometry:
+  workspace_bounds:
+    lower: [null, null, null]
+    upper: [null, null, null]
+  nominal_spacing: null
+  qualitative_multipliers:
+    compact: null
+    normal: null
+    spacious: null
+
+safety:
+  mapping_type: null
+  d_hard: null
+  d_plan_base: null
+  d_plan_margin: null
+  iapf_enter_base: null
+  iapf_enter_margin: null
+  iapf_exit_base: null
+  iapf_exit_margin: null
+  iapf_repulsion_base: null
+  iapf_repulsion_margin: null
+  s_min: null
+  s_max: null
+
+motion_limits:
+  velocity: null
+  acceleration: null
+  jerk: null
+
+timing:
+  policy_type: null
+  minimum_duration: null
+  auto_style_factors:
+    smooth: null
+    normal: null
+    aggressive: null
+  planning_distance_bound_type: null
+  final_recheck_tolerance: null
+
+allocator:
+  sample_hz: null
+  comparison_tolerance: null
+  parallel_d_plan_aggregation: null
+
+execution_profile:
+  task_adaptation_type: null
+  baseline_omega_c: [null, null, null]
+  baseline_omega_o: [null, null, null]
+  style_gains:
+    smooth: null
+    normal: null
+    aggressive: null
+  # Required only by a future non-identity task_adaptation_type.
+  task_adaptation_parameters: null
+
+controller_hard_clamps:
+  smoothing_alpha: null
+  omega_c_min: [null, null, null]
+  omega_c_max: [null, null, null]
+  omega_o_min: [null, null, null]
+  omega_o_max: [null, null, null]
+  velocity_max: null
+  acceleration_max: null
+  jerk_max: null
+  iapf_enter_min: null
+  iapf_enter_max: null
+  iapf_exit_max: null
+  iapf_repulsion_max: null
+
+pending_semantics:
+  line_vs_lineup: pending_confirmation
+  free_formation: pending_confirmation
+  forward_reference_frame: pending_confirmation
+
+provenance: null

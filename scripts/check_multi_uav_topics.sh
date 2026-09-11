@@ -29,10 +29,10 @@ for uid in $(seq 1 "$UAV_COUNT"); do
   echo "---- UAV$uid ----"
   check_topic "/uav${uid}/mavros/state"
   check_topic "/uav${uid}/mavros/local_position/odom"
-  check_topic "/uav${uid}/mavros/setpoint_position/local"
-  check_topic "/uav${uid}/swarm_command"
+  check_topic "/uav${uid}/mavros/setpoint_raw/local"
+  check_topic "/uav${uid}/execution_command"
   check_topic "/uav${uid}/status"
-  check_topic "/uav${uid}/odom"
+  check_topic "/uav${uid}/swarm_state"
 done
 
 echo ""

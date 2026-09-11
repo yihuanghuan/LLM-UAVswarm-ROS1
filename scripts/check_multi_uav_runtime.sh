@@ -32,11 +32,11 @@ for uid in $(seq 1 "$UAV_COUNT"); do
     missing=1
   fi
 
-  if timeout "$TIMEOUT_SEC" rostopic echo "/uav${uid}/odom" -n 1 >/tmp/uav_${uid}_public_odom.txt; then
-    echo "[OK] /uav${uid}/odom 有数据"
-    grep -E '^[xyz]:' /tmp/uav_${uid}_public_odom.txt || true
+  if timeout "$TIMEOUT_SEC" rostopic echo "/uav${uid}/swarm_state" -n 1 >/tmp/uav_${uid}_public_odom.txt; then
+    echo "[OK] /uav${uid}/swarm_state 有数据"
+    grep -E 'frame_id:|child_frame_id:' /tmp/uav_${uid}_public_odom.txt || true
   else
-    echo "[失败] /uav${uid}/odom 无数据"
+    echo "[失败] /uav${uid}/swarm_state 无数据"
     missing=1
   fi
 

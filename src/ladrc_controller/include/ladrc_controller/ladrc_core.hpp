@@ -56,6 +56,7 @@ public:
   void setObserverBandwidth(double omega_o);
   void setControllerBandwidth(double omega_c);
   void setControlGain(double b0);
+  void setOutputLimits(double min_output, double max_output);
   
   // Getters
   LADRCParams getParameters() const { return params_; }

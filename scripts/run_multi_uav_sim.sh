@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
 UAV_COUNT="${1:-3}"
 CONTAINER_NAME="${ROS1_MULTI_CONTAINER:-ros1_multi_uav}"
-IMAGE="${ROS1_MAVROS_IMAGE:-ros1-mavros:latest}"
+IMAGE="${ROS1_MAVROS_IMAGE:-ros1-paper:latest}"
 DOCKER_CMD="${DOCKER_CMD:-docker}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WS_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -20,7 +20,8 @@ echo "==> 工作区: $WS_DIR"
 echo "==> Docker 镜像: $IMAGE"
 echo "==> 容器名: $CONTAINER_NAME"
 
-disable_args=()
+ids="[$(seq -s, 1 "$UAV_COUNT")]"
+disable_args=("neighbor_uav_ids:=$ids")
 for uid in $(seq 1 10); do
   if [ "$uid" -gt "$UAV_COUNT" ]; then
     disable_args+=("enable_uav${uid}:=false")
@@ -34,8 +35,10 @@ $DOCKER_CMD run -d --name "$CONTAINER_NAME" \
   -v "$WS_DIR:/ros1_ws" \
   "$IMAGE" \
   bash -lc "
+    set -e
     source /opt/ros/noetic/setup.bash
     cd /ros1_ws
+    python3 scripts/sync_paper_controller_config.py --check
     catkin_make
     source /ros1_ws/devel/setup.bash
     roscore >/tmp/roscore.log 2>&1 &

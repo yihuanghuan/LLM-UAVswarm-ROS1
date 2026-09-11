@@ -1,0 +1,61 @@
+
+killing running instances
+GAZEBO_PLUGIN_PATH /opt/ros/humble/lib::/home/yihuang/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic
+GAZEBO_MODEL_PATH :/home/yihuang/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models
+LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/local/cuda-12.8/lib64:/home/yihuang/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic
+Starting gazebo
+Gazebo multi-robot simulator, version 11.10.2
+Copyright (C) 2012 Open Source Robotics Foundation.
+Released under the Apache 2 License.
+http://gazebosim.org
+
+starting instance 1 in /home/yihuang/PX4-Autopilot/build/px4_sitl_default/rootfs/0
+/home/yihuang/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models/iris/iris.sdf.jinja -> /tmp/iris_1.sdf
+Spawning iris_1 at 0.0 3
+starting instance 2 in /home/yihuang/PX4-Autopilot/build/px4_sitl_default/rootfs/1
+[1;32m[Msg] [0m[1;32mWaiting for master.[0m[1;32m
+[0m[1;32m[0m[1;32m[0m[1;32m[Msg] [0m[1;32mConnected to gazebo master @ [0m[1;32mhttp://127.0.0.1:11345[0m[1;32m
+[0m[1;32m[0m[1;32m[0m[1;32m[Msg] [0m[1;32mPublicized address: [0m[1;32m192.168.208.4[0m[1;32m
+[0m[1;32m[0m[1;32m[0m[1;32m[Msg] [0m[1;32mLoading world file [[0m[1;32m/home/yihuang/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/worlds/empty.world[0m[1;32m][0m[1;32m
+[0m[1;32m[0m[1;32m[0m[1;33m[Wrn] [gazebo_gps_plugin.cpp:77] [0m[1;33m[gazebo_gps_plugin]: iris_1::gps0 using gps topic "[0m[1;33mgps0[0m[1;33m"
+[0m[1;33m[Wrn] [gazebo_gps_plugin.cpp:202] [0m[1;33m[gazebo_gps_plugin] Using default update rate of [0m[1;33m5[0m[1;33mhz 
+[0m/home/yihuang/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models/iris/iris.sdf.jinja -> /tmp/iris_2.sdf
+Spawning iris_2 at 0.0 6
+starting instance 3 in /home/yihuang/PX4-Autopilot/build/px4_sitl_default/rootfs/2
+[1;32m[Msg] [0m[1;32mConnecting to PX4 SITL using [0m[1;32mTCP[0m[1;32m
+[0m[1;32m[Msg] [0m[1;32mLockstep is [0m[1;32menabled[0m[1;32m
+[0m[1;32m[Msg] [0m[1;32mSpeed factor set to: [0m[1;32m1[0m[1;32m
+[0m[1;32m[Msg] [0m[1;32mUsing MAVLink protocol v2.0
+[0m[1;33m[Wrn] [gazebo_gps_plugin.cpp:77] [0m[1;33m[gazebo_gps_plugin]: iris_2::gps0 using gps topic "[0m[1;33mgps0[0m[1;33m"
+[0m[1;33m[Wrn] [gazebo_gps_plugin.cpp:202] [0m[1;33m[gazebo_gps_plugin] Using default update rate of [0m[1;33m5[0m[1;33mhz 
+[0m/home/yihuang/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models/iris/iris.sdf.jinja -> /tmp/iris_3.sdf
+Spawning iris_3 at 0.0 9
+Starting gazebo client
+[1;32m[Msg] [0m[1;32mConnecting to PX4 SITL using [0m[1;32mTCP[0m[1;32m
+[0m[1;32m[Msg] [0m[1;32mLockstep is [0m[1;32menabled[0m[1;32m
+[0m[1;32m[Msg] [0m[1;32mSpeed factor set to: [0m[1;32m1[0m[1;32m
+[0m[1;32m[Msg] [0m[1;32mUsing MAVLink protocol v2.0
+[0m[1;33m[Wrn] [gazebo_gps_plugin.cpp:77] [0m[1;33m[gazebo_gps_plugin]: iris_3::gps0 using gps topic "[0m[1;33mgps0[0m[1;33m"
+[0m[1;33m[Wrn] [gazebo_gps_plugin.cpp:202] [0m[1;33m[gazebo_gps_plugin] Using default update rate of [0m[1;33m5[0m[1;33mhz 
+[0m[1;32m[Msg] [0m[1;32mConnecting to PX4 SITL using [0m[1;32mTCP[0m[1;32m
+[0m[1;32m[Msg] [0m[1;32mLockstep is [0m[1;32menabled[0m[1;32m
+[0m[1;32m[Msg] [0m[1;32mSpeed factor set to: [0m[1;32m1[0m[1;32m
+[0m[1;32m[Msg] [0m[1;32mUsing MAVLink protocol v2.0
+[0mFailed sending mavlink message: Broken pipe
+Closing connection.
+Failed sending mavlink message: Broken pipe
+Closing connection.
+Failed sending mavlink message: Broken pipe
+Closing connection.
+Connection closed by client.
+Connection closed by client.
+Connection closed by client.
+Connection closed by client.
+Connection closed by client.
+Connection closed by client.
+Connection closed by client.
+Connection closed by client.
+Connection closed by client.
+Connection closed by client.
+Connection closed by client.
+Connection closed by client.

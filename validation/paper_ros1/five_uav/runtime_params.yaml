@@ -1,0 +1,495 @@
+location_allocate:
+  assignment_mode: safety_aware
+  candidate_completion_timeout: 120.0
+  candidate_dispatch_readiness_timeout: 15.0
+  candidate_snapshot_skew: -1.0
+  candidate_state_timeout: -1.0
+  lfs_policy_file: /ros1_ws/src/lfs_policy/config/lfs_policy.paper_current.yaml
+  lfs_runtime_mode: candidate_v2
+  uav_ids:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+rosdistro: 'noetic
+
+  '
+roslaunch:
+  uris:
+    host_jiaolong_series__37725: http://JIAOLONG-Series:37725/
+    host_jiaolong_series__43021: http://JIAOLONG-Series:43021/
+rosversion: '1.17.4
+
+  '
+run_id: 6bc5b73e-ad88-11f1-9b02-b025aa8d3d31
+uav1:
+  ladrc_position_controller:
+    avoidance_mode: iapf_dual
+    b0_x: 1.0
+    b0_y: 1.0
+    b0_z: 1.0
+    control_adaptation_log_path: /ros1_ws/logs/control_adaptation_log.csv
+    control_frequency: 50.0
+    control_mode: ladrc_acceleration
+    enable_execution_profiles: true
+    enable_iapf_accel_feedforward: true
+    enu_offset_x: 0.0
+    enu_offset_y: 3.0
+    enu_offset_z: 0.0
+    execution_profile_acceleration_max: 5.0
+    execution_profile_iapf_enter_max: 1.7000000000000002
+    execution_profile_iapf_enter_min: 1.6
+    execution_profile_iapf_exit_max: 1.9
+    execution_profile_iapf_repulsion_max: 1.25
+    execution_profile_jerk_max: 10.0
+    execution_profile_omega_c_max:
+    - 1.875
+    - 1.875
+    - 2.1875
+    execution_profile_omega_c_min:
+    - 1.125
+    - 1.125
+    - 1.3125
+    execution_profile_omega_o_max:
+    - 6.25
+    - 6.25
+    - 9.375
+    execution_profile_omega_o_min:
+    - 3.75
+    - 3.75
+    - 5.625
+    execution_profile_smoothing_alpha: 1.0
+    execution_profile_velocity_max: 5.0
+    hover_position_enter_tolerance: 0.4
+    hover_position_exit_tolerance: 0.5
+    hover_stable_hold_time: 1.0
+    hover_velocity_enter_tolerance: 0.3
+    hover_velocity_exit_tolerance: 0.4
+    hover_velocity_filter_tau: 0.5
+    iapf_accel_gain: 0.3
+    iapf_accel_limit: 2.0
+    iapf_distance_epsilon: 0.1
+    iapf_enter_distance: 1.7
+    iapf_escape_gain: 0.05
+    iapf_escape_mode: id_order
+    iapf_exit_distance: 1.8
+    iapf_filter_alpha: 0.2
+    iapf_position_gain: 0.05
+    iapf_position_limit: 0.5
+    iapf_repulsion_gain: 25.0
+    iapf_safe_distance: 1.0
+    iapf_violation_distance: 1.5
+    idle_hover_safety_factor: 1.0
+    max_acceleration_x: 5.0
+    max_acceleration_y: 5.0
+    max_acceleration_z: 8.0
+    max_velocity: 5.0
+    neighbor_offset_multiplier: 3.0
+    neighbor_timeout: 0.2
+    neighbor_uav_ids:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    omega_c_x: 1.5
+    omega_c_y: 1.5
+    omega_c_z: 1.75
+    omega_o_x: 5.0
+    omega_o_y: 5.0
+    omega_o_z: 7.5
+    px4_target_system: 0
+    startup_command_retry_interval: 1.0
+    startup_max_request_attempts: 20
+    startup_odom_timeout: 0.5
+    startup_prestream_time: 1.5
+    startup_runtime_fault_debounce: 0.5
+    startup_settle_time: 10.0
+    startup_speed_tolerance: 0.15
+    startup_status_timeout: 2.0
+    startup_takeoff_altitude: 1.5
+    startup_takeoff_hold_time: 0.5
+    startup_takeoff_position_tolerance: 0.25
+    startup_total_timeout: 60.0
+  mavros:
+    fcu_url: udp://:14541@127.0.0.1:14581
+    gcs_url: ''
+    target_component_id: 1
+    target_system_id: 2
+uav2:
+  ladrc_position_controller:
+    avoidance_mode: iapf_dual
+    b0_x: 1.0
+    b0_y: 1.0
+    b0_z: 1.0
+    control_adaptation_log_path: /ros1_ws/logs/control_adaptation_log.csv
+    control_frequency: 50.0
+    control_mode: ladrc_acceleration
+    enable_execution_profiles: true
+    enable_iapf_accel_feedforward: true
+    enu_offset_x: 0.0
+    enu_offset_y: 6.0
+    enu_offset_z: 0.0
+    execution_profile_acceleration_max: 5.0
+    execution_profile_iapf_enter_max: 1.7000000000000002
+    execution_profile_iapf_enter_min: 1.6
+    execution_profile_iapf_exit_max: 1.9
+    execution_profile_iapf_repulsion_max: 1.25
+    execution_profile_jerk_max: 10.0
+    execution_profile_omega_c_max:
+    - 1.875
+    - 1.875
+    - 2.1875
+    execution_profile_omega_c_min:
+    - 1.125
+    - 1.125
+    - 1.3125
+    execution_profile_omega_o_max:
+    - 6.25
+    - 6.25
+    - 9.375
+    execution_profile_omega_o_min:
+    - 3.75
+    - 3.75
+    - 5.625
+    execution_profile_smoothing_alpha: 1.0
+    execution_profile_velocity_max: 5.0
+    hover_position_enter_tolerance: 0.4
+    hover_position_exit_tolerance: 0.5
+    hover_stable_hold_time: 1.0
+    hover_velocity_enter_tolerance: 0.3
+    hover_velocity_exit_tolerance: 0.4
+    hover_velocity_filter_tau: 0.5
+    iapf_accel_gain: 0.3
+    iapf_accel_limit: 2.0
+    iapf_distance_epsilon: 0.1
+    iapf_enter_distance: 1.7
+    iapf_escape_gain: 0.05
+    iapf_escape_mode: id_order
+    iapf_exit_distance: 1.8
+    iapf_filter_alpha: 0.2
+    iapf_position_gain: 0.05
+    iapf_position_limit: 0.5
+    iapf_repulsion_gain: 25.0
+    iapf_safe_distance: 1.0
+    iapf_violation_distance: 1.5
+    idle_hover_safety_factor: 1.0
+    max_acceleration_x: 5.0
+    max_acceleration_y: 5.0
+    max_acceleration_z: 8.0
+    max_velocity: 5.0
+    neighbor_offset_multiplier: 3.0
+    neighbor_timeout: 0.2
+    neighbor_uav_ids:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    omega_c_x: 1.5
+    omega_c_y: 1.5
+    omega_c_z: 1.75
+    omega_o_x: 5.0
+    omega_o_y: 5.0
+    omega_o_z: 7.5
+    px4_target_system: 0
+    startup_command_retry_interval: 1.0
+    startup_max_request_attempts: 20
+    startup_odom_timeout: 0.5
+    startup_prestream_time: 1.5
+    startup_runtime_fault_debounce: 0.5
+    startup_settle_time: 10.0
+    startup_speed_tolerance: 0.15
+    startup_status_timeout: 2.0
+    startup_takeoff_altitude: 1.5
+    startup_takeoff_hold_time: 0.5
+    startup_takeoff_position_tolerance: 0.25
+    startup_total_timeout: 60.0
+  mavros:
+    fcu_url: udp://:14542@127.0.0.1:14582
+    gcs_url: ''
+    target_component_id: 1
+    target_system_id: 3
+uav3:
+  ladrc_position_controller:
+    avoidance_mode: iapf_dual
+    b0_x: 1.0
+    b0_y: 1.0
+    b0_z: 1.0
+    control_adaptation_log_path: /ros1_ws/logs/control_adaptation_log.csv
+    control_frequency: 50.0
+    control_mode: ladrc_acceleration
+    enable_execution_profiles: true
+    enable_iapf_accel_feedforward: true
+    enu_offset_x: 0.0
+    enu_offset_y: 9.0
+    enu_offset_z: 0.0
+    execution_profile_acceleration_max: 5.0
+    execution_profile_iapf_enter_max: 1.7000000000000002
+    execution_profile_iapf_enter_min: 1.6
+    execution_profile_iapf_exit_max: 1.9
+    execution_profile_iapf_repulsion_max: 1.25
+    execution_profile_jerk_max: 10.0
+    execution_profile_omega_c_max:
+    - 1.875
+    - 1.875
+    - 2.1875
+    execution_profile_omega_c_min:
+    - 1.125
+    - 1.125
+    - 1.3125
+    execution_profile_omega_o_max:
+    - 6.25
+    - 6.25
+    - 9.375
+    execution_profile_omega_o_min:
+    - 3.75
+    - 3.75
+    - 5.625
+    execution_profile_smoothing_alpha: 1.0
+    execution_profile_velocity_max: 5.0
+    hover_position_enter_tolerance: 0.4
+    hover_position_exit_tolerance: 0.5
+    hover_stable_hold_time: 1.0
+    hover_velocity_enter_tolerance: 0.3
+    hover_velocity_exit_tolerance: 0.4
+    hover_velocity_filter_tau: 0.5
+    iapf_accel_gain: 0.3
+    iapf_accel_limit: 2.0
+    iapf_distance_epsilon: 0.1
+    iapf_enter_distance: 1.7
+    iapf_escape_gain: 0.05
+    iapf_escape_mode: id_order
+    iapf_exit_distance: 1.8
+    iapf_filter_alpha: 0.2
+    iapf_position_gain: 0.05
+    iapf_position_limit: 0.5
+    iapf_repulsion_gain: 25.0
+    iapf_safe_distance: 1.0
+    iapf_violation_distance: 1.5
+    idle_hover_safety_factor: 1.0
+    max_acceleration_x: 5.0
+    max_acceleration_y: 5.0
+    max_acceleration_z: 8.0
+    max_velocity: 5.0
+    neighbor_offset_multiplier: 3.0
+    neighbor_timeout: 0.2
+    neighbor_uav_ids:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    omega_c_x: 1.5
+    omega_c_y: 1.5
+    omega_c_z: 1.75
+    omega_o_x: 5.0
+    omega_o_y: 5.0
+    omega_o_z: 7.5
+    px4_target_system: 0
+    startup_command_retry_interval: 1.0
+    startup_max_request_attempts: 20
+    startup_odom_timeout: 0.5
+    startup_prestream_time: 1.5
+    startup_runtime_fault_debounce: 0.5
+    startup_settle_time: 10.0
+    startup_speed_tolerance: 0.15
+    startup_status_timeout: 2.0
+    startup_takeoff_altitude: 1.5
+    startup_takeoff_hold_time: 0.5
+    startup_takeoff_position_tolerance: 0.25
+    startup_total_timeout: 60.0
+  mavros:
+    fcu_url: udp://:14543@127.0.0.1:14583
+    gcs_url: ''
+    target_component_id: 1
+    target_system_id: 4
+uav4:
+  ladrc_position_controller:
+    avoidance_mode: iapf_dual
+    b0_x: 1.0
+    b0_y: 1.0
+    b0_z: 1.0
+    control_adaptation_log_path: /ros1_ws/logs/control_adaptation_log.csv
+    control_frequency: 50.0
+    control_mode: ladrc_acceleration
+    enable_execution_profiles: true
+    enable_iapf_accel_feedforward: true
+    enu_offset_x: 0.0
+    enu_offset_y: 12.0
+    enu_offset_z: 0.0
+    execution_profile_acceleration_max: 5.0
+    execution_profile_iapf_enter_max: 1.7000000000000002
+    execution_profile_iapf_enter_min: 1.6
+    execution_profile_iapf_exit_max: 1.9
+    execution_profile_iapf_repulsion_max: 1.25
+    execution_profile_jerk_max: 10.0
+    execution_profile_omega_c_max:
+    - 1.875
+    - 1.875
+    - 2.1875
+    execution_profile_omega_c_min:
+    - 1.125
+    - 1.125
+    - 1.3125
+    execution_profile_omega_o_max:
+    - 6.25
+    - 6.25
+    - 9.375
+    execution_profile_omega_o_min:
+    - 3.75
+    - 3.75
+    - 5.625
+    execution_profile_smoothing_alpha: 1.0
+    execution_profile_velocity_max: 5.0
+    hover_position_enter_tolerance: 0.4
+    hover_position_exit_tolerance: 0.5
+    hover_stable_hold_time: 1.0
+    hover_velocity_enter_tolerance: 0.3
+    hover_velocity_exit_tolerance: 0.4
+    hover_velocity_filter_tau: 0.5
+    iapf_accel_gain: 0.3
+    iapf_accel_limit: 2.0
+    iapf_distance_epsilon: 0.1
+    iapf_enter_distance: 1.7
+    iapf_escape_gain: 0.05
+    iapf_escape_mode: id_order
+    iapf_exit_distance: 1.8
+    iapf_filter_alpha: 0.2
+    iapf_position_gain: 0.05
+    iapf_position_limit: 0.5
+    iapf_repulsion_gain: 25.0
+    iapf_safe_distance: 1.0
+    iapf_violation_distance: 1.5
+    idle_hover_safety_factor: 1.0
+    max_acceleration_x: 5.0
+    max_acceleration_y: 5.0
+    max_acceleration_z: 8.0
+    max_velocity: 5.0
+    neighbor_offset_multiplier: 3.0
+    neighbor_timeout: 0.2
+    neighbor_uav_ids:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    omega_c_x: 1.5
+    omega_c_y: 1.5
+    omega_c_z: 1.75
+    omega_o_x: 5.0
+    omega_o_y: 5.0
+    omega_o_z: 7.5
+    px4_target_system: 0
+    startup_command_retry_interval: 1.0
+    startup_max_request_attempts: 20
+    startup_odom_timeout: 0.5
+    startup_prestream_time: 1.5
+    startup_runtime_fault_debounce: 0.5
+    startup_settle_time: 10.0
+    startup_speed_tolerance: 0.15
+    startup_status_timeout: 2.0
+    startup_takeoff_altitude: 1.5
+    startup_takeoff_hold_time: 0.5
+    startup_takeoff_position_tolerance: 0.25
+    startup_total_timeout: 60.0
+  mavros:
+    fcu_url: udp://:14544@127.0.0.1:14584
+    gcs_url: ''
+    target_component_id: 1
+    target_system_id: 5
+uav5:
+  ladrc_position_controller:
+    avoidance_mode: iapf_dual
+    b0_x: 1.0
+    b0_y: 1.0
+    b0_z: 1.0
+    control_adaptation_log_path: /ros1_ws/logs/control_adaptation_log.csv
+    control_frequency: 50.0
+    control_mode: ladrc_acceleration
+    enable_execution_profiles: true
+    enable_iapf_accel_feedforward: true
+    enu_offset_x: 0.0
+    enu_offset_y: 15.0
+    enu_offset_z: 0.0
+    execution_profile_acceleration_max: 5.0
+    execution_profile_iapf_enter_max: 1.7000000000000002
+    execution_profile_iapf_enter_min: 1.6
+    execution_profile_iapf_exit_max: 1.9
+    execution_profile_iapf_repulsion_max: 1.25
+    execution_profile_jerk_max: 10.0
+    execution_profile_omega_c_max:
+    - 1.875
+    - 1.875
+    - 2.1875
+    execution_profile_omega_c_min:
+    - 1.125
+    - 1.125
+    - 1.3125
+    execution_profile_omega_o_max:
+    - 6.25
+    - 6.25
+    - 9.375
+    execution_profile_omega_o_min:
+    - 3.75
+    - 3.75
+    - 5.625
+    execution_profile_smoothing_alpha: 1.0
+    execution_profile_velocity_max: 5.0
+    hover_position_enter_tolerance: 0.4
+    hover_position_exit_tolerance: 0.5
+    hover_stable_hold_time: 1.0
+    hover_velocity_enter_tolerance: 0.3
+    hover_velocity_exit_tolerance: 0.4
+    hover_velocity_filter_tau: 0.5
+    iapf_accel_gain: 0.3
+    iapf_accel_limit: 2.0
+    iapf_distance_epsilon: 0.1
+    iapf_enter_distance: 1.7
+    iapf_escape_gain: 0.05
+    iapf_escape_mode: id_order
+    iapf_exit_distance: 1.8
+    iapf_filter_alpha: 0.2
+    iapf_position_gain: 0.05
+    iapf_position_limit: 0.5
+    iapf_repulsion_gain: 25.0
+    iapf_safe_distance: 1.0
+    iapf_violation_distance: 1.5
+    idle_hover_safety_factor: 1.0
+    max_acceleration_x: 5.0
+    max_acceleration_y: 5.0
+    max_acceleration_z: 8.0
+    max_velocity: 5.0
+    neighbor_offset_multiplier: 3.0
+    neighbor_timeout: 0.2
+    neighbor_uav_ids:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    omega_c_x: 1.5
+    omega_c_y: 1.5
+    omega_c_z: 1.75
+    omega_o_x: 5.0
+    omega_o_y: 5.0
+    omega_o_z: 7.5
+    px4_target_system: 0
+    startup_command_retry_interval: 1.0
+    startup_max_request_attempts: 20
+    startup_odom_timeout: 0.5
+    startup_prestream_time: 1.5
+    startup_runtime_fault_debounce: 0.5
+    startup_settle_time: 10.0
+    startup_speed_tolerance: 0.15
+    startup_status_timeout: 2.0
+    startup_takeoff_altitude: 1.5
+    startup_takeoff_hold_time: 0.5
+    startup_takeoff_position_tolerance: 0.25
+    startup_total_timeout: 60.0
+  mavros:
+    fcu_url: udp://:14545@127.0.0.1:14585
+    gcs_url: ''
+    target_component_id: 1
+    target_system_id: 6

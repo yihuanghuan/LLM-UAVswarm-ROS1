@@ -1,0 +1,102 @@
+policy_status: paper_frozen
+configuration_id: paper-current-v11-c0-f-frozen
+
+state_snapshot:
+  # C0-B frozen from P99 plus a fixed 10 ms margin.
+  state_timeout: 0.02208
+  snapshot_skew: 0.022043
+  fresh_state_wait_timeout: 0.010
+  allow_receive_time_fallback: false
+  require_velocity: true
+
+geometry:
+  workspace_bounds:
+    lower: [-15.0, -10.0, 0.5]
+    upper: [15.0, 35.0, 15.0]
+  nominal_spacing: 2.25
+  qualitative_multipliers: {compact: 0.8, normal: 1.0, spacious: 1.25}
+
+safety:
+  mapping_type: hard_anchored_linear
+  # C0-D planning-safety component freeze.
+  d_hard: 1.50
+  d_plan_base: 1.80
+  # C0-E IAPF runtime freeze: k_rep(s) = base + margin * (s - 1).
+  iapf_enter_base: 1.60
+  iapf_exit_base: 1.70
+  iapf_repulsion_base: 1.0
+  iapf_repulsion_margin: 0.25
+  s_min: 1.0
+  s_max: 2.0
+
+motion_limits:
+  velocity: 5.0
+  acceleration: 5.0
+  jerk: 10.0
+
+timing:
+  policy_type: minimum_jerk
+  minimum_duration: 0.5
+  # C0-F frozen values. Explicit T bypasses these factors.
+  auto_style_factors: {smooth: 1.30, normal: 1.15, aggressive: 1.10}
+  planning_distance_bound_type: max_pairwise
+  final_recheck_tolerance: 0.0
+
+allocator:
+  sample_hz: 20.0
+  comparison_tolerance: 0.000001
+  parallel_d_plan_aggregation: max
+
+execution_profile:
+  task_adaptation_type: identity
+  baseline_omega_c: [1.5, 1.5, 1.75]
+  baseline_omega_o: [5.0, 5.0, 7.5]
+  # C0-F frozen values; task_gain remains exactly 1.0.
+  style_gains: {smooth: 0.8, normal: 1.0, aggressive: 1.1}
+
+controller_hard_clamps:
+  smoothing_alpha: 1.0
+  # Safety envelope (0.75x--1.25x baseline), not a policy selector.
+  omega_c_min: [1.125, 1.125, 1.3125]
+  omega_c_max: [1.875, 1.875, 2.1875]
+  omega_o_min: [3.75, 3.75, 5.625]
+  omega_o_max: [6.25, 6.25, 9.375]
+  velocity_max: 5.0
+  acceleration_max: 5.0
+  jerk_max: 10.0
+  # Derived coverage bounds for the selected C0-E mapping over s in [1, 2].
+  iapf_enter_min: 1.60
+  iapf_enter_max: 1.7000000000000002
+  iapf_exit_max: 1.90
+  iapf_repulsion_max: 1.25
+
+# C0-E-owned controller runtime filter; distinct from the architecture-frozen
+# execution-profile smoothing_alpha above.
+iapf_runtime:
+  filter_alpha: 0.20
+
+parameter_status:
+  architecture_rules: paper-frozen
+  c0_a_motion_ladrc: frozen
+  c0_b_state_freshness: frozen
+  c0_c_geometry_scale: frozen
+  c0_d_planning_safety: frozen
+  c0_e_iapf: frozen
+  c0_f_motion_style: frozen
+  physical_environment: provisional
+  algorithm_calibration: c0-f-motion-style-frozen
+  semantic_controller: architecture-frozen-c0-f-motion-style-frozen
+
+provenance:
+  d_hard: safety.d_hard -> controller iapf_violation_distance
+  d_plan_s1: location_allocate/safety_aware_allocator.py:d_plan
+  iapf_soft: safety -> ExecutionProfile -> controller IAPF parameters
+  ladrc_baseline: execution_profile.baseline_omega_c,execution_profile.baseline_omega_o
+  dynamics: motion_limits
+  state_freshness: experiments_v2/Calibration Experiments/C0-B-state-freshness/results/C0-B_state_freshness_freeze/frozen_state_freshness_policy.yaml
+  geometry_scale: experiments_v2/Calibration Experiments/C0-C-geometry-scale/results/C0-C_geometry_scale_freeze/frozen_geometry_policy.yaml
+  planning_safety: experiments_v2/Calibration Experiments/C0-D-safety/results/C0-D_safety_policy_freeze/frozen_safety_policy.yaml
+  iapf_runtime: experiments_v2/Calibration Experiments/C0-E-iapf/results/C0-E_iapf_freeze/frozen_iapf_policy.yaml
+  motion_style: experiments_v2/Calibration Experiments/C0-F-motion-style/results/C0-F_motion_style_freeze/frozen_motion_style_policy.yaml
+  allocator: location_allocate/safety_aware_allocator.py:lexicographic-score
+  paper_rules: paper-path freeze + legacy isolation.md
